@@ -1,0 +1,85 @@
+.Signform{
+    width: 60%;
+}
+.Signform form{
+    width: 100%;
+    align-items: start;
+}
+.Signform h3{
+    color:var(--secondaryColor);
+    font-weight: 600;
+    font-size: 36px;
+}
+.Signform .inputs .twoInone{
+    display: flex;
+    justify-content: space-between;
+}
+.Signform .inputs .twoInone .part{
+    width: 48%;
+
+
+}
+.Signform .input{
+    display: flex;
+    flex-direction: column;
+}
+
+.Signform .inputs input{
+   border:solid #DCD7D7 1px ;
+   background-color: #F8F7F7;
+   padding: 6px 10px;
+   border-radius: 10px;
+   color: var(--secondaryColor);
+   box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.25);
+
+} 
+.Signform .inputs label,.input p{
+    color: var(--secondaryColor);
+    font-weight: 600;
+}
+.Signform .form-check-input:checked {
+    background-color: #007bff; /* Change to your desired color */
+    border-color: #007bff; /* Border color when checked */
+  }
+  
+.Signform .input button{
+    background-color: var(--primaryColor);
+    color: #fff;
+    width: 50%;
+}
+/* Add this CSS to control background color for valid/invalid inputs */
+.part .is-valid {
+    background-color: #ffffff !important; 
+  }
+.is-invalid {
+    background-color: #ffffff !important; 
+  }
+  
+ 
+  
+
+@media (min-width:699px) and (max-width:998px){
+    .Signform{
+        width: 60%;
+    }
+    .Signform form{
+        width: 100%;
+    }
+}
+@media(max-width:698px) {
+    .body{
+        width: 100%;
+       
+       
+    }
+    .Signform{
+        width: 100%;
+    }
+    .Signform form {
+        align-items: center;
+    }
+    .Signform h3{
+        font-size: 30px;
+    }
+   
+}

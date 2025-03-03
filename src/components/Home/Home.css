@@ -1,0 +1,115 @@
+.right{
+    /* background-color: aquamarine;
+    height: 500px;*/
+} 
+.left{
+    /* background-color: black;
+    height: 500px; */
+
+}
+/* .left img{
+    width: 100%;
+} */
+
+ .h2{
+   font-size: 3rem;
+ }
+ .title p{
+    color: #5E6670;
+    
+ }
+ .services{
+ 
+ }
+ .service{
+   
+ }
+ .main{
+    background-color: #fff;
+    
+ }
+ .main span{
+    font-size: 1.25rem;
+    margin-left: 10px;
+    font-weight: 700;
+ }
+ 
+
+ .main i{
+    font-size: 1.5rem;
+    color: var(--primaryColor);
+    background-color: #E7F0FA;
+    padding: 1rem;
+ }
+ .h4
+ {
+    font-size: 1.5rem;
+    font-weight: 700;
+ }
+ .head button{
+    border: 1px solid var(--primaryColor);
+ }
+ .head button a,button i{
+    color: var(--primaryColor);
+
+ }
+ 
+ .jop .name img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+
+ }
+ .jop .details h4{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #6B6969;
+
+ }
+ .details p{
+    display: flex;
+    align-items: center;
+    color: #6B6969;
+ }
+ .details p span{
+    margin:0 6px;
+ }
+ .details p .dot{
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #b8b8b8;
+ }
+ .jop .p{
+    color: #8E8B8B;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.jop button{
+    background-color: #EB85331A;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: none;
+    color: #FFB836;
+    cursor:default;
+}
+.box{
+    margin-bottom: 10px;
+}
+.map .save {
+    padding: 15px 20px;
+    background-color: #F9F9F9;
+    border-radius: 50%;
+}
+.map .save i{
+    font-size: 20px;
+     color: #6B6969;
+     margin-top: 5px;
+
+}
+.map .caption h4{
+    font-size: 1.1rem;
+    font-family: 600;
+}
+

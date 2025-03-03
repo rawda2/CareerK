@@ -1,0 +1,37 @@
+.right,.otp .right{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.right form{
+    display: flex;
+    flex-direction: column;
+}
+.right .content{
+    width: 60%;
+}
+.right .content p,label{
+    font-weight: 300;
+    font-size: 14px;
+}
+.right .content input{
+    border: #a09e9e 1px solid;
+}
+.right .content button{
+    background-color: var(--primaryColor);
+    border: none; 
+    padding: 5px 0;
+    font-weight: 500;
+    color: #fff;
+
+
+}
+.right .content .NavLink{
+    color: #fff;
+    text-decoration: none;
+}
+.right h2{
+    font-weight: 600;
+}
