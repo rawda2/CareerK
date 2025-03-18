@@ -1,0 +1,50 @@
+.community-card {
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pitch-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .badge{
+    background-color: #ffb93648 !important;
+    padding: 10px 10px !important;
+    color: #FFB836 !important;
+    font-size: 16px !important;
+    border-radius: 20px !important;
+  }
+  .community-bio {
+    font-size: 14px;
+    max-width: 400px;
+  }
+  
+  .members-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: -10px;
+    border: 2px solid #fff;
+    object-fit: cover;
+  }
+  
+  .extra-members {
+    background-color: #d1d5db;
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: -10px;
+  }
+  

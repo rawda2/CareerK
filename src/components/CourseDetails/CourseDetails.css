@@ -1,0 +1,21 @@
+.main i{
+    font-size: 1.2rem;
+    margin-top: 5px;
+}
+.info span{
+    font-size: 1rem ;
+    font-weight: 600;
+    color: #999999;
+}
+.course .details h6{
+    font-weight: 700;
+}
+.course .details p{
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--grayColor);
+}
+.second .course{
+    border: 1px solid #F2F1F1;
+}
+.details .span{font-size: .9rem;}

@@ -1,0 +1,78 @@
+.signup{
+    height: 100vh;
+}
+
+.body{
+    height: 93.6%;
+    padding: 0;
+    margin: 0;
+}
+.Or p{
+    color: var(--secondaryColor);
+    font-weight: 600;
+}
+.Or p::before{
+  content: "";
+  width: 150px;
+  height: 2px;
+  background-color: var(--secondaryColor);
+  position:absolute;
+  right: 30px;
+  top: 10px;
+
+}
+.Or p::after{
+    content: "";
+    width: 150px;
+    height: 2px;
+    background-color: var(--secondaryColor);
+    position:absolute;
+    left: 30px;
+    top: 10px;
+  
+  }
+
+
+
+.body .left{
+    width: 50%;
+    background-color: var(--primaryColor);
+    overflow: hidden;
+    display: flex;
+}
+.body .left .logo h1{
+    font-size: 80px;
+    font-family: var(--logoFont);
+    font-weight: 800;
+
+}
+.logo i{
+    font-size: 70px;
+    display: block;
+    position: relative;
+    left: 40%;
+}
+@media (min-width:699px) and (max-width:998px){
+    .body{
+        width: 100%;
+        justify-content: space-between;
+       
+    }
+   .body .left{
+    width: 40%; 
+}
+.body .left .logo h1{
+    font-size: 68px;
+}
+}
+@media(max-width:698px) {
+    .body{
+        width: 100%;
+       
+       
+    }
+   .body .left{
+   display: none;
+   }
+   
+}

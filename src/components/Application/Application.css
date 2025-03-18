@@ -1,0 +1,84 @@
+.form .input input{
+    border: solid 1px #CACACA !important;
+    border-radius: 5px;
+    padding:  5px;
+    margin-bottom: 10px;
+}
+.form .input label,.preview label{
+    color: #6B6969;
+    font-size: 14px;
+    font-weight: 500;
+    
+}
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.upload-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.drop-zone p {
+    font-size: 14px;
+    color: #777;
+    margin: 0;
+}
+
+.upload-btn {
+    margin-top: 8px;
+    padding: 5px 12px;
+    font-size: 16px;
+    color: var(--primaryColor);
+    
+    cursor: pointer;
+}
+
+.cv-input {
+    display: none; 
+}
+.next{
+    color: #fff;
+width: 10%;
+border: 0;
+background-color: var(--primaryColor);
+border-radius: 10px;
+padding:  10px 25px;
+display: flex;
+position: absolute;
+right: 0;
+bottom: -60px;
+display: flex; 
+justify-content: center;
+
+}
+.preview div{
+    border: solid 1px #ccc;
+}
+.submit i{
+    font-size: 50px;
+
+}
+.body .fa-arrow-left{
+    top: 53px;
+    font-size: 20px;
+    left: 280px;
+    cursor: pointer;
+}

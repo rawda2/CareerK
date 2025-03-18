@@ -1,0 +1,14 @@
+.roadmap{
+    border: 1px solid #F2F1F1;
+    border-radius: 20px;
+}
+.roadmap .h{background-color: #EDF1FF;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;}
+.roadmap .h h4 {
+    background-color: #EDF1FF;
+    font-weight: 600;
+    height: 100%;
+    font-size: 20px;
+    color: var(--primaryColor);
+}

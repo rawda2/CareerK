@@ -1,0 +1,35 @@
+
+.icon i{
+    font-size: 24px;
+    cursor: pointer;
+    color: #6B6969;
+
+    
+}
+
+.nav-item a,.icons .linkNav{
+    text-decoration: none;
+    color: #6B6969;
+    font-weight:500;
+    font-size: 1rem;
+    position: relative;
+    
+}
+.nav-item a::after{
+    content: "";
+    width: 0;
+    height: 2px;
+    background-color:var(--secondaryColor);
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+
+    transition: all 1s;
+}
+.nav-item a:hover{color: var(--secondaryColor);}
+.nav-item a:hover::after{
+    width: 94%;
+}
+.nav-item a:active::after{
+    width: 94%;
+}

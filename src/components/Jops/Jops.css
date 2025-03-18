@@ -1,0 +1,74 @@
+.search{
+    border: 1px solid #ccc;
+    width: 45%;
+}
+.search input::placeholder{
+    color: #8E8B8B;
+    border:1px solid #F2F1F1;
+}
+.search i,.body h5,.light{
+    color: #8E8B8B ;
+}
+.light{
+    font-size: 1.1rem;
+}
+.normal{
+    font-weight: 700;
+    font-size: 1.1rem !important;
+}
+.special{
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primaryColor);
+}
+.list option,option{
+    color: #8E8B8B;
+font-weight: 500;
+}
+.header .find{
+    background-color: transparent;
+    border: 1px solid var(--primaryColor);
+    padding: 0px 10px !important;
+    height: 46px !important;
+    margin-top: 3px;
+    border-radius: 5px;
+}
+.find .link{
+    color: var(--primaryColor) !important;
+    font-weight: 600;
+}
+.body{
+    background-color: #f3f3f3;
+}
+.body .right{
+    width: 65%;
+}
+.right .jop{
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.right .fa-bookmark{
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 24px;
+  color: #8E8B8B;
+}
+.body .left{
+    width: 30%;
+    background-color: #fff;
+    height: 1200px;
+    
+}
+.left .name img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+.apply button{
+    padding: 10px 100px;
+    border: 0;
+    background-color: var(--primaryColor);
+    border-radius: 10px;
+}
