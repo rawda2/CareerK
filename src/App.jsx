@@ -51,6 +51,8 @@ let routers=createBrowserRouter([
 
 
 
+
+    {path:"new",element:<New/>}
   ]}
 ])
 
@@ -60,7 +62,9 @@ function App() {
   return (
     <>
       <RouterProvider router={routers}></RouterProvider>
+
      
+
     </>
   )
 }

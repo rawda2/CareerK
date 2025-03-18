@@ -1,3 +1,4 @@
+
 import React from 'react'
 
 export default function Template() {
@@ -5,3 +6,4 @@ export default function Template() {
     <div>Template</div>
   )
 }
+

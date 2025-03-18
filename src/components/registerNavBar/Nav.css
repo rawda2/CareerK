@@ -1,3 +1,10 @@
+
+nav{
+    background-color: var(--primaryColor);
+}
+nav .logo img{
+    width: 200px;
+}
 nav{
     background-color: var(--primaryColor);
 }
