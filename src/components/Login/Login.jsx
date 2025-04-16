@@ -122,13 +122,13 @@ export default function Login() {
           <div className="input w-100 d-flex justify-content-center align-items-center mt-3">
             <button
               type="submit"
-              className="btn btn-primary "
+              className="btn  "
               disabled={formik.isSubmitting}
             >
               {formik.isSubmitting ? "Logging in..." : "Log In"}
             </button>
             <p className="mt-3">
-              Don't have an Account? <NavLink to={"/signup"}>Sign Up</NavLink>
+              Don't have an Account? <NavLink to={"/continue"}>Sign Up</NavLink>
             </p>
             <p className="">
             <NavLink to={"/reset"}>  Forgot Password </NavLink>

@@ -19,3 +19,6 @@
     border: 1px solid #F2F1F1;
 }
 .details .span{font-size: .9rem;}
+.title p{
+    font-size: 16px;
+}

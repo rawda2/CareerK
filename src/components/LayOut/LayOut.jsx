@@ -9,7 +9,7 @@ export default function LayOut() {
   const location = useLocation();
   const isAuthenticated = localStorage.getItem('token');
 
-  const noNavBarRoutes = ['/signup', '/signupForm', '/login', '/reset', '/otp', '/new','/splash','/'];
+  const noNavBarRoutes = ['/signup', '/signupForm', '/login', '/reset', '/otp', '/new','/splash','/','/continue'];
 
   console.log('isAuthenticated:', isAuthenticated);
   console.log('Current Path:', location.pathname);

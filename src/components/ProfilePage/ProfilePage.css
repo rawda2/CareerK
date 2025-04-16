@@ -1,0 +1,232 @@
+.profile-page {
+  padding: 20px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.card {
+  border: #CACACA solid 1px !important;
+}
+
+.profile-page .Btn {
+  position: absolute;
+  bottom: -30px;
+  right: 20px;
+  padding: 8px 25px;
+  background-color: var(--primaryColor);
+  border: none;
+}
+
+
+.aside {
+  width: 18% !important;
+  background-color: #fff;
+  height: 280px;
+  margin-left: -20px;
+}
+
+.profile-menu {
+  margin-right: 50px;
+
+  border: none !important;
+  width: 100%;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #8E8B8B;
+  border: none !important;
+  text-decoration: none;
+
+
+}
+
+.menu-item i {
+  font-size: 20px;
+  margin-right: 10px;
+  color: #8E8B8B;
+  transition: background-color 0.2s;
+
+
+}
+
+.menu-item:hover, .menu-item:focus {
+  background-color: var(--primaryColor);
+  color: #fff;
+}
+
+.menu-item:hover i, .menu-item:focus i {
+  color: #fff;
+
+}
+
+.logout, .logout i {
+  color: #E3767A;
+}
+
+
+.my-courses {
+  padding: 20px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.course-item {
+  border: 1px solid #CACACA;
+  height: 260px;
+
+}
+
+.course-image {
+  width: 100%;
+  border-radius: 8px;
+  margin: 0;
+  height: 260px;
+  padding: 0;
+}
+
+.course-details {
+  padding-left: 15px;
+}
+
+.course-category {
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.progress {
+  margin-top: 10px;
+}
+
+.p {
+  color: #6B6969;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.course-details h5 {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.saved-jobs {
+  padding: 20px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.job-item {
+  border: none;
+  margin-bottom: 20px;
+}
+
+.company-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.job-details {
+  padding-left: 15px;
+}
+
+.job-details h5 {
+  font-weight: 600;
+}
+
+
+.job-info {
+  text-align: right;
+}
+
+.salary {
+  font-weight: bold;
+
+}
+
+.float-right {
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  background-color: var(--primaryColor);
+  border: none;
+
+}
+.float-right :hover{
+  background-color: #8E8B8B !important;
+}
+
+.card1 {
+  background: rgb(148, 203, 230);
+  background: linear-gradient(90deg, rgba(148, 203, 230, 1) 0%, rgba(109, 174, 207, 1) 50%, rgba(68, 144, 183, 1) 100%);
+  border: none !important;
+  color: #fff;
+}
+
+.card2 {
+  background: rgb(232, 126, 124);
+  background: linear-gradient(90deg, rgba(232, 126, 124, 1) 0%, rgba(239, 160, 144, 1) 50%, rgba(245, 192, 162, 1) 100%);
+  border: none !important;
+  color: #fff;
+
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+
+.add-card-popup{
+  width: 450px;
+  height: 400px;
+  background-color: #fff;
+}
+.add-card-popup .title i
+,.logout-popup i{
+  font-size: 20px;
+  cursor: pointer;
+}
+.btn-outline-danger{
+  background-color: #F8E5E5 !important;
+  color: #AA1924 !important;
+  border: none !important;
+}
+.btn-danger{
+  background-color: #AA1924 !important;
+}

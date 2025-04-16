@@ -1,0 +1,117 @@
+.continue-as-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #fafaf8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  
+ .continue-as-container .logo{
+    width: 600px;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 40px;
+  }
+  
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    max-width: 680px;
+    width: 100%;
+  }
+  
+  .title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #121212;
+    text-align: center;
+    line-height: 52px;
+    margin: 0;
+  }
+  
+  .options-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .option-card {
+    width: 250px;
+    height: 250px;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #b3b0b0;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .option-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .option-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+  
+  .option-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #434343;
+    margin: 0;
+    line-height: 52px;
+  }
+  
+  .circle-icon {
+    width: 36px;
+    height: 36px;
+    background: #ffffff;
+    border-radius: 49px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    margin-top: 40px;
+  }
+  
+  .select-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+  
+  @media (max-width: 768px) {
+    .logo {
+      width: 100%;
+      height: auto;
+    }
+    
+    .options-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .option-card {
+      width: 100%;
+      max-width: 320px;
+    }
+  }
+  

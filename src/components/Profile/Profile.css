@@ -1,0 +1,60 @@
+
+  
+  .certification-image {
+    width: 50px;
+    height: 50px;
+  }
+  .profile-header{
+    width: 100%;
+    height: 200px;
+    background-image: url('./../../assets/proBg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    bottom: -70px;
+    left: 40%;
+    border: 4px solid #fff;
+  }
+  .card-body .btn1{
+    position: absolute;
+    top: 180px;
+    right: 20px;
+    color: var(--primaryColor);
+    border: 1px solid var(--primaryColor);
+  }
+  .details .d-flex .text-start{
+    background-color: #EDF1FF;
+    border: 1px solid #CACACA;
+  }
+  .card-body .btn{
+    border: 1px solid var(--primaryColor) !important;
+    color: var(--primaryColor) !important;
+    background-color: #fff;
+  }
+  .btn .link{
+    color: var(--primaryColor) !important;
+  }
+  .card-body .float{
+    bottom: 10px;
+    right: 20px;
+  }
+  .spans span{
+    background-color: #F2F1F1;
+  }
+  .work .left p{
+    font-size: 14px;
+    color: rgb(148, 146, 146);
+  }
+  .certification-image {
+    width: 50px;
+    height: 50px;
+  }
+  .cap p{font-size: 12px;}

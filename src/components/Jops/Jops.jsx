@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Jops.css";
 import axios from "axios";
+import work from "./../../assets/work.png";
 
 export default function Jops() {
   const [jobs, setJobs] = useState([]); // State to store jobs
@@ -33,9 +34,9 @@ export default function Jops() {
   const handleJobClick = (job) => {
     setSelectedJob(job);
     window.scrollTo({
-        top: 300,
-        behavior: "smooth",
-      });
+      top: 300,
+      behavior: "smooth",
+    });
   };
 
   // Filter jobs based on search query
@@ -106,7 +107,9 @@ export default function Jops() {
         <div className="jops px-5 mt-2 d-flex justify-content-between">
           <div className="right d-flex flex-column align-items-start justify-content-start">
             {filteredJobs.length === 0 ? (
-              <p className="text-center mt-4">No jobs found matching your search.</p>
+              <p className="text-center mt-4">
+                No jobs found matching your search.
+              </p>
             ) : (
               filteredJobs.map((job) => (
                 <div
@@ -117,7 +120,7 @@ export default function Jops() {
                 >
                   <div className="details">
                     <div className="name d-flex align-items-center">
-                      <img src="src/assets/work.png" alt="work image" />
+                      <img src={work} alt="work image" />
                       <div className="details ms-2 mt-3">
                         <h4 className="text-dark" id="jop">
                           {job.title}
@@ -197,7 +200,9 @@ export default function Jops() {
                 </div>
                 <div className="apply mt-4 w-100 d-flex justify-content-center">
                   <button className="">
-                    <Link className="link" to={'/fill'}>Apply Now</Link>
+                    <Link className="link" to={"/fill"}>
+                      Apply Now
+                    </Link>
                   </button>
                 </div>
 
@@ -205,9 +210,9 @@ export default function Jops() {
                   <ul>
                     <dt className="my-2">Minimum Qualifications</dt>
                     {selectedJob.qualifications ? (
-                      JSON.parse(selectedJob.qualifications).map((qual, index) => (
-                        <li key={index}>{qual}</li>
-                      ))
+                      JSON.parse(selectedJob.qualifications).map(
+                        (qual, index) => <li key={index}>{qual}</li>
+                      )
                     ) : (
                       <li>No qualifications specified</li>
                     )}

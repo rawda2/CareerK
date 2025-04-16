@@ -1,70 +1,55 @@
-
-import React, { useState } from 'react';
-import './NavBar.css'
-import { Link } from 'react-router-dom';
-import logo from './../../assets/navLogo.png'
+import React, { useState } from "react";
+import "./NavBar.css";
+import { Link } from "react-router-dom";
+import logo from "./../../assets/navLogo.png";
 
 const NavBar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
-    <nav className="navbar navbar-expand-lg bg-light shadow ">
-      <div className="container w-100 d-flex justify-content-evenly align-items-center">
-        {/* Brand/Logo */}
-        <div className="logo ">
-        <img src={logo} alt="" />
-
-        </div>
-
-        {/* Toggle Button for Mobile */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          onClick={toggleMenu}
-          aria-expanded={isMenuOpen ? 'true' : 'false'}
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        {/* Navbar Links */}
-        <div className={`collapse mt-3 navbar-collapse ${isMenuOpen ? 'show' : ''} ms-5`} id="navbarNav">
-          <ul className="navbar-nav  ">
-            <li className="nav-item ">
-              <Link className="nav-link" to={'/home'}>Home</Link>
+    <nav className="navbar navbar-expand-lg navbar-light bg-white">
+      <div className=" container-fluid px-5 py-2 d-flex justify-content-between align-items-center">
+        <Link className="navbar-brand w-10 mt-1" to={'/home'}>
+          <img src={logo} alt="Logo" />
+        </Link>
+        <div className=" w-75 " id="navbarNav">
+          <ul className="navbar-nav w-100 d-flex justify-content-center mt-3">
+            <li className="nav-item me-5">
+              <Link className="nav-link" to={'/home'}>
+                Home
+              </Link>
             </li>
-            <li className="nav-item ms-lg-5">
-              <Link className="nav-link" to={'/jops'}>Jobs</Link>
+            <li className="nav-item me-5">
+              <Link className="nav-link" to={'/courses'}>
+                Courses
+              </Link>
             </li>
-            <li className="nav-item ms-lg-5">
-              <Link className="nav-link" to={'/courses'}>Courses</Link>
+            <li className="nav-item me-5">
+              <Link className="nav-link"  to={'/jops'}>
+                Job Matching
+              </Link>
             </li>
-            <li className="nav-item ms-lg-5">
-              <Link className="nav-link" to={'/roadmaps'}>Road Maps</Link>
+            <li className="nav-item me-5">
+              <Link className="nav-link" to={'/roadmaps'}>
+                Roadmaps
+              </Link>
             </li>
-            <li className="nav-item ms-lg-5">
-              <Link className="nav-link" to={''}>Contact Us</Link>
-            </li>
-           
-          </ul>
-
-        </div>
-        <div className="icons mt-1">
-          <ul className=' list-unstyled d-flex'>
-            <li className="icon mt-2 ms-5 d-flex flex-column justify-content-center align-items-center">
-            <i className="fa-regular fa-comments"></i>  
-            <a className="linkNav" href="/comm">Community</a>
-            </li>
-            <li className="icon mt-2 ms-5 d-flex flex-column justify-content-center align-items-center">
-            <i className="fa-regular fa-bell"></i>      
-            <a className="linkNav" href="/notification">Notification</a>
+            <li className="nav-item me-5">
+              <Link className="nav-link" to={'/comm'}>
+                Community
+              </Link>
             </li>
           </ul>
+          
         </div>
+        <div className="d-flex align-items-center w-15 ms-2">
+            <div className="nav-item me-4 d-flex flex-column align-items-center">
+              <i className=" fa-regular fa-bell mb-2 p-2 profile rounded-circle"></i> 
+              <span className="nav-link">Notifications</span>
+            </div>
+            <div className="nav-item d-flex flex-column align-items-center">
+              <span className=" rounded-circle mb-2  profile p-2">AM</span>
+              <Link className="nav-link" to={'/profile'}>Profile</Link>
+            </div>
+          </div>
       </div>
     </nav>
   );

@@ -27,7 +27,7 @@ const Comm = () => {
   return (
     <>
     <section className="all p-5">
-    <div className="community-card mb-5 me-4 mt-5 shadow-sm px-5 d-flex align-items-center">
+    <div className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center">
       {/* Left Section */}
       <div className="d-flex align-items-start">
         <img src={main} alt="Pitch" className="pitch-logo" />
@@ -57,7 +57,7 @@ const Comm = () => {
         </div>
       </div>
     </div>
-    <div className="community-card mb-5 me-4 mt-5 shadow-sm px-5 d-flex align-items-center">
+    <div className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center">
       {/* Left Section */}
       <div className="d-flex align-items-start">
         <img src={main} alt="Pitch" className="pitch-logo" />
@@ -86,7 +86,7 @@ const Comm = () => {
           ))}
         </div>
       </div>
-    </div> <div className="community-card mb-5 me-4 mt-5 shadow-sm px-5 d-flex align-items-center">
+    </div> <div className="community-card mb-5 mt-5 py-5 me-4  shadow-sm px-5 d-flex align-items-center">
       {/* Left Section */}
       <div className="d-flex align-items-start">
         <img src={main} alt="Pitch" className="pitch-logo" />
@@ -115,7 +115,7 @@ const Comm = () => {
           ))}
         </div>
       </div>
-    </div> <div className="community-card mb-5 me-4 mt-5 shadow-sm px-5 d-flex align-items-center">
+    </div> <div className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center">
       {/* Left Section */}
       <div className="d-flex align-items-start">
         <img src={main} alt="Pitch" className="pitch-logo" />

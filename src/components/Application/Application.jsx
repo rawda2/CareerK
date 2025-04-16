@@ -55,7 +55,7 @@ export default function Application() {
           />
           <p className="mt-0 ms-3 mb-0">{progress}%</p>
         </div>
-        <div className="form mt-3 d-flex w-50 flex-column justify-content-start text-start">
+        <div className="form mt-3 d-flex w-50 flex-column justify-content-start text-start py-5">
           {formNo === 0 && (
             <form className="d-flex position-relative flex-column gap-2 mt-2">
               <h5>Contact Information</h5>

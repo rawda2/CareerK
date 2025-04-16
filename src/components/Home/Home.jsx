@@ -12,7 +12,7 @@ export default function Home() {
         <header className="container-fluid mt-5 px-lg-5 mb-5">
           <div className="row d-flex justify-content-between">
             <div className="right col-lg-6 col-md-6 col-12">
-              <div className="title">
+              <div className="title text-start">
                 <h2 className="h2">
                   Find a job that suits your interest & skills.
                 </h2>

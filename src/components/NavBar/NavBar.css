@@ -1,71 +1,25 @@
 
-.icon i{
-    font-size: 24px;
-    cursor: pointer;
-    color: #6B6969;
 
+.navbar-brand img {
     
+    width:161px;
 }
 
-.nav-item a,.icons .linkNav{
-    text-decoration: none;
+.nav-link {
+ color: #6B6969 !important;
+ font-size: 16px !important;
+ font-weight: 500 !important;
+}
+.nav-link:focus {
+    color: var(--primaryColor) !important;
+
+   }
+ .nav-item i{
+    font-size: 23px;
     color: #6B6969;
-    font-weight:500;
-    font-size: 1rem;
-    position: relative;
-    
-}
-.nav-item a::after{
-    content: "";
-    width: 0;
-    height: 2px;
-    background-color:var(--secondaryColor);
-    position: absolute;
-    bottom: 5px;
-    left: 5px;
-
-    transition: all 1s;
-}
-.nav-item a:hover{color: var(--secondaryColor);}
-.nav-item a:hover::after{
-    width: 94%;
-}
-.nav-item a:active::after{
-    width: 94%;
-}
-
-.icon i{
-    font-size: 24px;
-    cursor: pointer;
-    color: #6B6969;
-
-    
-}
-
-.nav-item a,.icons .link{
-    text-decoration: none;
-    color: #6B6969;
-    font-weight:500;
-    font-size: 1rem;
-    position: relative;
-
-    
-}
-.nav-item a::after{
-    content: "";
-    width: 0;
-    height: 2px;
-    background-color:var(--secondaryColor);
-    position: absolute;
-    bottom: 5px;
-    left: 5px;
-
-    transition: all 1s;
-}
-.nav-item a:hover{color: var(--secondaryColor);}
-.nav-item a:hover::after{
-    width: 94%;
-}
-.nav-item a:active::after{
-    width: 94%;
-}
+ }
+ .profile{
+    color: var(--primaryColor) !important;
+    background-color: #EDF1FF !important;
+    font-weight: 600;
+ }

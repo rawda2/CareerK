@@ -5,7 +5,7 @@ import axios from "axios";
 import "./SignUpForm.css";
 import { NavLink, useNavigate } from "react-router-dom";
 
-export default function SignUpForm() {
+export default function SignUpForm({ onSuccess }) {
   const [apiError, setApiError] = useState("");
   const navigate = useNavigate(); // Hook to navigate between routes
 
@@ -39,6 +39,7 @@ export default function SignUpForm() {
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setSubmitting(true);
+
       setApiError(""); // Clear any previous error messages
       try {
         const response = await axios.post(
@@ -51,8 +52,9 @@ export default function SignUpForm() {
             phone: values.phone,
           }
         );
-        resetForm(); // Reset the form after successful submission
-        navigate("/login"); // Navigate to login page
+        resetForm();
+        onSuccess(); 
+        // navigate("/login"); // Navigate to login page
       } catch (error) {
         if (error.response && error.response.data) {
           const { message } = error.response.data;
@@ -237,10 +239,9 @@ export default function SignUpForm() {
           <div className="input w-100 d-flex justify-content-center align-items-center mt-3">
             <button
               type="submit"
-              className="btn btn-primary"
-              disabled={formik.isSubmitting}
+              className="btn "
             >
-              {formik.isSubmitting ? "Submitting..." : "Sign Up"}
+              Next
             </button>
             <p className="mt-3">
               Already have an Account?{" "}

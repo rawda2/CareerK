@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import viteLogo from '/vite.svg'
 import './App.css'
+
+
 import { createBrowserRouter } from 'react-router-dom'
 import { RouterProvider } from 'react-router-dom'
 import LayOut from './components/LayOut/LayOut'
@@ -24,6 +26,14 @@ import CheckOut from './components/checkOut/CheckOut'
 import Done from './components/checkOut/done'
 import Comm from './components/community/Comm'
 import Chat from './components/Chat/Chat'
+import Certificate from './components/Certificate/Certificate'
+import Done2 from './components/Certificate/Done2';
+import ContinueAs from './components/ContinueAs/ContinueAs'
+import ProfilePage from './components/ProfilePage/ProfilePage'
+import Profile from './components/Profile/Profile'
+import Cv from './components/Cv/Cv'
+
+
 
 let routers=createBrowserRouter([
   {path:'',element:<LayOut/>,children:[
@@ -42,17 +52,21 @@ let routers=createBrowserRouter([
     {path:"fill",element:<Application/>},
     {path:"courses",element:<Courses/>},
     {path:"data",element:<Data/>},
-    { path: "course/:id", element: <CourseDetails /> },
-    { path: "checkout/:id", element: <CheckOut /> },
+    {path:"course/:id", element: <CourseDetails /> },
+    {path:"checkout/:id", element: <CheckOut /> },
     {path:"done",element:<Done/>},
     {path:"roadmaps",element:<RoadMaps/>},
     {path:"comm",element:<Comm/>},
     {path:"chat",element:<Chat/>},
+    {path:"certificate",element:<Certificate/>},
+    {path:"done",element:<Done/>},
+    {path:"done2",element:<Done2/>},
+    {path:"new",element:<New/>},
+    {path:"continue",element:<ContinueAs/>},
+    {path:"editProfile",element:<ProfilePage/>},
+    {path:"profile",element:<Profile/>},
+    {path:"Cv",element:<Cv/>},
 
-
-
-
-    {path:"new",element:<New/>}
   ]}
 ])
 

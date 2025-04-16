@@ -19,7 +19,7 @@ export default function OTP() {
               <OtpInput
                 value={otp}
                 onChange={setOtp}
-                numInputs={6}
+                numInputs={4}
                 renderSeparator={<span className="otp-separator p-1"></span>}
                 renderInput={(props) => (
                   <input
