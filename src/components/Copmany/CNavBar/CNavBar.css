@@ -1,0 +1,33 @@
+/* Base style */
+.notify {
+    width: 400px;
+    position: absolute;
+    right: 180px;
+    z-index: 22;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+   
+}
+.notes{
+    height: 200px;
+
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    /* Firefox support */
+    /* scrollbar-width: thin; */
+    scrollbar-color: #999 #f1f1f1;
+
+}
+.notify .fa-xmark{
+    color: #999;
+}
+
+.note .note-img{
+    width: 35px;
+    margin-right: 10px;
+}
+.fa-bell ,.fa-xmark{
+    cursor: pointer;
+}

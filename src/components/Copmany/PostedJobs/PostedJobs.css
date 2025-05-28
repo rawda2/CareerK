@@ -1,0 +1,29 @@
+.Posted .img{
+    width: 100px;
+}
+.Posted .logo-image{
+    width: 80px;
+    height: 80px;
+    object-fit: contain;}
+
+    .job .right{
+        width: 70%;
+    }
+    .job .left{
+        width: 10%;
+        height: 100%;
+    
+    }
+    .job .right .details{
+        width: 90%;
+    }
+    .job{
+        border: 1px solid #dfdada;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        padding:5px 20px  !important;
+    }
+    .app{
+        border: none;
+
+    }

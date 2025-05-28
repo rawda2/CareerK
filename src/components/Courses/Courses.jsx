@@ -22,7 +22,7 @@ export default function Courses() {
       price: 99,
       duration: "4 weeks",
       image: image1, // Replace with real image URL
-      category: "Web Development",
+      category: "Web ",
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ export default function Courses() {
       price: 149,
       duration: "6 weeks",
       image: image2, // Replace with real image URL
-      category: "Web Development",
+      category: "Web ",
     },
     {
       id: 3,
@@ -43,7 +43,7 @@ export default function Courses() {
       price: 129,
       duration: "5 weeks",
       image: image3, // Replace with real image URL
-      category: "Backend Development",
+      category: "Backend ",
     },
     {
       id: 4,
@@ -63,7 +63,7 @@ export default function Courses() {
       price: 149,
       duration: "6 weeks",
       image: image5, // Replace with real image URL
-      category: "Web Development",
+      category: "Web ",
     },
     {
       id: 6,
@@ -73,7 +73,7 @@ export default function Courses() {
       price: 99,
       duration: "4 weeks",
       image: image6, // Replace with real image URL
-      category: "Web Development",
+      category: "Web ",
     },
     // Add more courses as needed
   ]);
@@ -132,44 +132,45 @@ export default function Courses() {
           </div>
         </div>
       </section>
-      <section className="body py-3 px-3 d-flex flex-column align-items-center justify-content-center w-100">
+      <section className="body py-3 px-3 d-flex  flex-wrap align-items-center justify-content-center gap-3 w-100">
         {courses.map((course) => (
             <Link
   key={course.id}
   to={`/course/${course.id}`}
   onClick={()=>handleClick}
         state={{course}}
-        className="course-card text-decoration-none my-4 border w-80 d-flex position-relative"
+        className="course-card text-decoration-none my-2 border  d-flex flex-column  w-40 position-relative"
         >
-            <img
+          <div className="title position-relative d-flex">
+          <img
               src={course.image}
               alt={course.title}
               className="course-image  "
-              style={{ width: "40%", height: "100%", objectFit: "cover" }}
+              style={{ width: "30%", height: "100%", objectFit: "cover" }}
             />
-            <span className="span d-flex justify-content-center align-items-center m-4 p-2 rounded-5 position-absolute top-0 end-0">
+            <span className="span d-flex justify-content-center text-start gap-0  align-items-center me-2 py-1 px-2  rounded-5 position-absolute top-0 end-0">
               {course.category}
             </span>
 
-            <div className="caption p-4 d-flex flex-column justify-content-center">
-              <h4 className="hBold text-black">{course.title}</h4>
-              <span className=" textGray">{course.duration}</span>
-              <div className="details d-flex flex-column mt-4">
-                <div className="detail d-flex gap-2">
-                  <i className="fa-solid fa-play span mb-3 "></i>
-                  <p>{course.description}</p>
-                </div>
-                <div className="detail d-flex gap-2">
-                  <i className="fa-solid fa-play span mb-3 "></i>
-                  <p>{course.description}</p>
-                </div>
-                <div className="detail d-flex gap-2">
-                  <i className="fa-solid fa-play span mb-3 "></i>
-                  <p>{course.description}</p>
-                </div>
-                
-              </div>
+            <div className="caption p-2 d-flex flex-column justify-content-center align-items-start">
+              <h5 className=" text-black">{course.title}</h5>
+              <p className=" textGray ">{course.duration}</p>
+             
             </div>
+          </div>
+          
+<div className="details d-flex flex-column justify-content-center mt-4 ps-3 ">
+<div className="detail d-flex gap-2">
+  <i className="fa-solid fa-play span mb-3 "></i>
+  <p>{course.description}</p>
+</div>
+<div className="detail d-flex gap-2">
+  <i className="fa-solid fa-play span mb-3 "></i>
+  <p>{course.description}</p>
+</div>
+
+
+</div>
           
           </Link>
           

@@ -1,0 +1,45 @@
+.CsignUp .form1 .noPhoto{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: #ccc;
+    position: relative;
+}
+.CsignUp .form1 .photo img{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+}
+.custom-upload-btn {
+    color: var(--primaryColor);
+    border: 1px solid var(--primaryColor);
+    padding: 6px 12px;
+    border-radius: 8px;
+    background-color: transparent;
+    cursor: pointer;
+    bottom: 0px;
+    right: 0px;
+    z-index: 11;
+  }
+ 
+  .CsignUp .form1{
+    background-color: #F3F3F3;
+    height: 100vh;
+  }
+  .CsignUp  .fa-arrow-left{
+    position: absolute;
+    left: 20px;
+    top: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--primaryColor);
+  }
+ .CsignUp .form1 .last{
+    left: -150px;
+    top: 37px;
+  }
+  .CsignUp .form1 textarea{
+    border: 1px solid #ccc !important;
+  }
+ 
+ 

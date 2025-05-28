@@ -554,9 +554,7 @@ const ProfilePage = () => {
               >
                 <i className="fa-solid fa-credit-card"></i> Payment Options
               </Link>
-              <Link className="menu-item logout rounded-2 mb-2" onClick={toggleLogoutPopup}>
-                <i className="fa-solid fa-right-from-bracket"></i> Logout
-              </Link>
+              
             </ListGroup>
           </Card>
         </Container>
@@ -591,21 +589,7 @@ const ProfilePage = () => {
           </div>
         </div>
       )}
-       {showLogoutPopup && (
-        <div className="overlay">
-          <div className="logout-popup p-4 rounded-4 shadow position-relative text-center bg-light">
-            <div className="title d-flex justify-content-between">
-              <h4>Logout</h4>
-              <i className="fa-solid fa-xmark" onClick={toggleLogoutPopup}></i>
-            </div>
-            <p>Are you sure you want to logout?</p>
-            <div className="d-flex justify-content-end gap-2">
-              <button className="btn btn-outline-danger">Log out</button>
-              <button className="btn btn-danger" onClick={toggleLogoutPopup}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+    
 
         
       </section>

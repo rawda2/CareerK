@@ -42,11 +42,11 @@
   }
   
   .option-card {
-    width: 250px;
-    height: 250px;
+    width: 220px !important;
+    height: 220px !important;
     background: #ffffff;
     border-radius: 20px;
-    border: 1px solid #b3b0b0;
+    border: 1px solid rgb(219, 215, 215) !important;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
   }
@@ -62,18 +62,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
   }
   
   .option-icon {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     object-fit: contain;
   }
   
   .option-title {
     font-family: 'Roboto', sans-serif;
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 700;
     color: #434343;
     margin: 0;
@@ -81,15 +81,16 @@
   }
   
   .circle-icon {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     background: #ffffff;
-    border-radius: 49px;
+    /* border-radius: 49px; */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px;
+    /* padding: 6px; */
     margin-top: 40px;
+    border:none;
   }
   
   .select-icon {

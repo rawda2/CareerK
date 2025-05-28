@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "./Application.css";
 import { Link } from "react-router-dom";
+
+
 export default function Application() {
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");

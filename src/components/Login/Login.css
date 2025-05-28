@@ -1,6 +1,7 @@
 
 .right .inputs .input{
     position: relative;
+    background-color: transparent !important;
 }
 .right .inputs .input i{
     position: absolute;

@@ -3,6 +3,7 @@
     border-top-right-radius: 18px;
     cursor: pointer;
     border-bottom-right-radius: 18px;
+    background-color: #fff;
 }
 .course-card img,.course-card{
     border-top-left-radius: 18px;
@@ -13,7 +14,23 @@
     background-color: #e7ecff;
 
 }
+.title .span{
+    font-size: 12px !important;
+    width: 100px;
+    height: 50px;
+    margin-top: 10px;
+
+
+}
 .detail .span{
-    padding: 10px 12px;
     border-radius: 50%;
+    padding: 10px;
+    height: 40px;
+    width: 40px;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+.course-card .details{
+    height: 120px;
 }

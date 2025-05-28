@@ -2,7 +2,7 @@
 
 .navbar-brand img {
     
-    width:161px;
+    width:180px;
 }
 
 .nav-link {
@@ -22,4 +22,37 @@
     color: var(--primaryColor) !important;
     background-color: #EDF1FF !important;
     font-weight: 600;
+ }
+ .overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+ }
+ .logout-popup i{
+   font-size: 20px;
+   cursor: pointer;
+ }
+ .btn-outline-danger{
+   background-color: #F8E5E5 !important;
+   color: #AA1924 !important;
+   border: none !important;
+ }
+ .btn-outline-danger #link{
+   color: #AA1924 !important;
+   text-decoration: none;
+ 
+ }
+ .btn-danger{
+   background-color: #AA1924 !important;
+ } 
+ .fa-right-from-bracket{
+   cursor: pointer;
+   color: #AA1924 !important;
  }

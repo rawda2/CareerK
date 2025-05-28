@@ -32,7 +32,7 @@
 .aside {
   width: 18% !important;
   background-color: #fff;
-  height: 280px;
+  height: 240px;
   margin-left: -20px;
 }
 
@@ -226,6 +226,11 @@
   background-color: #F8E5E5 !important;
   color: #AA1924 !important;
   border: none !important;
+}
+.btn-outline-danger #link{
+  color: #AA1924 !important;
+  text-decoration: none;
+
 }
 .btn-danger{
   background-color: #AA1924 !important;

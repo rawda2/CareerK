@@ -1,20 +1,14 @@
-.Signform{
-    width: 60%;
-}
+
 .Signform form{
     width: 100%;
     align-items: start;
 }
-.Signform h3{
-    color:var(--secondaryColor);
-    font-weight: 600;
-    font-size: 36px;
-}
-.Signform .inputs .twoInone{
+
+ .twoInone{
     display: flex;
     justify-content: space-between;
 }
-.Signform .inputs .twoInone .part{
+ .twoInone .part{
     width: 48%;
 
 
@@ -24,7 +18,7 @@
     flex-direction: column;
 }
 
-.Signform .inputs input{
+.Signform  input,.signup input,.signup select,textarea,.CsignUp input,.CsignUp select,.new input,.reset input,.OTP input{
    border:solid #DCD7D7 1px ;
    background-color: #F8F7F7;
    padding: 6px 10px;
@@ -33,7 +27,7 @@
    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.25);
 
 } 
-.Signform .inputs label,.input p{
+.Signform .inputs label,.input p,.CsignUp label,.signup label,.new label,.reset label ,.reset h2,.OTP h2,.new h2,.signup .form1 h4{
     color: var(--secondaryColor);
     font-weight: 600;
 }
@@ -42,7 +36,7 @@
     border-color: #007bff; /* Border color when checked */
   }
   
-.Signform .input button{
+.Signform .input button,.CsignUp .input button{
     background-color: var(--primaryColor);
     color: #fff;
     width: 50%;

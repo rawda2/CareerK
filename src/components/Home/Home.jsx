@@ -8,7 +8,7 @@ import work from './../../assets/work.png';
 export default function Home() {
   return (
     <>
-      <section className="home px-lg-5 px-3 px-md-5 py-5 mt-5">
+      <section className="home px-lg-5 px-3 px-md-5 py-2 pb-5">
         <header className="container-fluid mt-5 px-lg-5 mb-5">
           <div className="row d-flex justify-content-between">
             <div className="right col-lg-6 col-md-6 col-12">

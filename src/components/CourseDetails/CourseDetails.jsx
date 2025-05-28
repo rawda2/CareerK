@@ -20,7 +20,7 @@ const CourseDetails = () => {
       price: 99,
       duration: "4 weeks",
       image: image1,
-      category: "Web Development",
+      category: "Web ",
     },
     {
       id: 2,
@@ -30,7 +30,7 @@ const CourseDetails = () => {
       price: 149,
       duration: "6 weeks",
       image: image2,
-      category: "Web Development",
+      category: "Web ",
     },
     {
       id: 3,
@@ -41,7 +41,7 @@ const CourseDetails = () => {
       price: 129,
       duration: "5 weeks",
       image: image3, // Replace with real image URL
-      category: "Backend Development",
+      category: "Backend ",
     },
     {
       id: 4,
@@ -61,18 +61,9 @@ const CourseDetails = () => {
       price: 149,
       duration: "6 weeks",
       image: image5, // Replace with real image URL
-      category: "Web Development",
+      category: "Web",
     },
-    {
-      id: 6,
-      title: "Introduction to React",
-      description: "Learn the basics of React and build your first app.",
-      instructor: "John Doe",
-      price: 99,
-      duration: "4 weeks",
-      image: image6, // Replace with real image URL
-      category: "Web Development",
-    },
+   
   ];
 
   // Convert `id` to string since `useParams()` returns a string
@@ -84,22 +75,23 @@ const CourseDetails = () => {
 
   return (
     <>
-      <section className="main w-100 d-flex gap-4 p-5">
+    <div className="all d-flex justify-content-center py-3">
+    <section className="main w-90 d-flex justify-content-center p-5">
         <div className="course-details px-4  w-60">
           <img
             src={course.image}
             alt={course.title}
             className=" rounded-4"
-            style={{ width: "100%", height: "350px", objectFit: "cover" }}
+            style={{ width: "70%", height: "350px", objectFit: "cover" }}
           />
-          <div className="title d-flex justify-content-between w-100 mt-3 px-2">
+          <div className="title d-flex justify-content-between w-70 mt-3 px-2">
             <p>
               <strong>By</strong> {course.instructor}
             </p>
             <p>
               {" "}
               <strong>
-                <i className=" fa-regular fa-calendar"></i> published in
+                <i className=" fa-regular fa-calendar "></i> published in
               </strong>{" "}
               12 sep 2025
             </p>
@@ -108,7 +100,7 @@ const CourseDetails = () => {
             <h4 className="hBold">Course title</h4>
             <p className=" mb-5">{course.description}</p>
             <h4 className="hBold">OverView</h4>
-            <p className=" mb-5">
+            <p className=" mb-5 w-70">
               {course.description}
               {course.description}
               {course.description}
@@ -187,7 +179,7 @@ const CourseDetails = () => {
                         <p>{course.duration}</p>
                         <span className="span mt-2 p-2 ms-0 rounded-5 d-flex justify-content-center ">{course.category}</span>
                     </div>
-                    <div className="rate ms-4 mt-1"><i className=" fa-solid fa-star text-warning"></i> 4.8</div>
+                    <div className="rate ms-4 mt-1 d-flex justify-content-center align-items-baseline me-3 gap-0"><i className=" fa-solid fa-star text-warning bg-transparent"></i> <p> 4.8</p></div>
 
 
                 </div>
@@ -195,6 +187,8 @@ const CourseDetails = () => {
           </div>
         </div>
       </section>
+    </div>
+      
     </>
   );
 };
