@@ -50,6 +50,9 @@ export default function Login() {
         if(userType=="company"){
           navigate('/Chome')
         }
+         if(userType=="customer"){
+          navigate('/Cuhome')
+        }
         resetForm();
 
       } catch (error) {

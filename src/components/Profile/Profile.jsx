@@ -6,7 +6,9 @@ import cert2 from './../../assets/cert2.png'
 import cert3 from './../../assets/cert3.png'
 import { Link } from 'react-router-dom';
 
-
+import { useEffect } from 'react'
+import axios from 'axios'
+import { useState } from 'react'
 
 export default function Profile() {
     const certifications = [
@@ -14,6 +16,33 @@ export default function Profile() {
         { desc:"Certificate of Completion",name: 'Coursera', image: cert2},
         { desc:"Certificate of Completion",name: 'Harvard Online', image:cert3 },
       ];
+   const [profile,setProfile]=useState([])
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
+  const [error, setError] = useState("");
+
+       useEffect(() => {
+          const fetchProfile = async () => {
+            try {
+              const response = await axios.get(
+                `${API_URL}/developer/profile`,
+                {
+                  headers: {
+                    "ngrok-skip-browser-warning": "true",
+      
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+              console.log("API Response:", response.data);
+              setProfile(response.data.applications);
+            } catch (error) {
+              console.error(error);
+              setError("Failed to fetch Profile. Please try again later.");
+            }
+          };
+          fetchProfile();
+        }, []);
   return (
     <>
           <div className="container my-5 ">

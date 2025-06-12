@@ -119,7 +119,7 @@ export default function CustSign() {
 
       try {
         const response = await axios.post(
-          `${VITE_API_URL}/customer/register`,
+          `${API_URL}/customer/register`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );

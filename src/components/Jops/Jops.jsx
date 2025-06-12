@@ -2,29 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Jops.css";
 import axios from "axios";
-import work from "./../../assets/work.png";
-
+import work from "./../../assets/work.png"
+import Loader from "../Loader/Loader";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Jops() {
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState("");
   const [selectedJob, setSelectedJob] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [savedJobs, setSavedJobs] = useState(new Set());
+  
   const API_URL = import.meta.env.VITE_API_URL;
-
+  const token=localStorage.getItem("token")
   useEffect(() => {
     const fetchJobs = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(`${API_URL}/jobs/get-job-posts`, {
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+        'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true' // Add this header
         },
-        withCredentials: false // Disable credentials for ngrok free tier
+        withCredentials: false 
       });
-        console.log("API Response:", response.data); // Debugging
-        // setJobs(Array.isArray(response?.data) ? response.data : []);
+        console.log("API Response:", response.data); 
+         setJobs(response.data.jobs);
       } catch (error) {
         console.error(error);
         setError("Failed to fetch jobs. Please try again later.");
@@ -36,39 +41,101 @@ export default function Jops() {
     fetchJobs();
   }, []);
 
-  // const handleJobClick = (job) => {
-  //   setSelectedJob(job);
-  //   window.scrollTo({ top: 300, behavior: "smooth" });
-  // };
+  const handleJobClick = (job) => {
+    setSelectedJob(job);
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  };
 
-  // const handleSearchChange = (e) => {
-  //   setSearchQuery(e.target.value);
-  // };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+   useEffect(() => {
+      const getSaved = async () => {
+        try {
+          const response = await axios.get(
+            `${API_URL}/developer-profile/bookmarks`,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "true",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+  
+          const savedJobIds = response.data.map(job => job.post_id || job.id);
+    setSavedJobs(new Set(savedJobIds));
+        } catch (error) {
+          console.error("Error deleting application:", error);
+          alert("Failed to Get Saved Jobs. Please try again.");
+        }
+      };
+      getSaved();
+    }, []);
+const handleSave = async (post_id) => {
+  try {
+    await axios.post(
+      `${API_URL}/developer-profile/bookmark`,
+      { post_id },
+      {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  // const filteredJobs = jobs.filter(job => {
-  //   if (!job) return false;
-  //   if (!searchQuery) return true; // Show all jobs when search is empty
+    setSavedJobs(prev => {
+      const newSet = new Set(prev); // Create a new Set from the previous state
+      if (newSet.has(post_id)) {
+        newSet.delete(post_id);
+        toast.success("Job unsaved successfully");
+      } else {
+        newSet.add(post_id);
+        toast.success("Job saved successfully");
+      }
+      return newSet;
+    });
+  } catch (error) {
+    console.error("Error saving job:", error);
+    toast.error("Failed to save job. Please try again.");
+  }
+};
+
+  const filteredJobs = jobs.filter(job => {
+    if (!job) return false;
+    if (!searchQuery) return true; // Show all jobs when search is empty
     
-  //   const query = searchQuery.toLowerCase();
-  //   const searchableFields = [
-  //     job.title,
-  //     job.job_type,
-  //     job.location,
-  //     job.salary_range,
-  //     job.experience_required,
-  //     job.category
-  //   ].filter(Boolean); // Remove null/undefined values
+    const query = searchQuery.toLowerCase();
+    const searchableFields = [
+      job.title,
+      job.job_type,
+      job.location,
+      job.salary_range,
+      job.experience_required,
+      job.category
+    ].filter(Boolean); // Remove null/undefined values
     
-  //   return searchableFields.some(field => 
-  //     field.toString().toLowerCase().includes(query)
-  //   );
-  // });
+    return searchableFields.some(field => 
+      field.toString().toLowerCase().includes(query)
+    );
+  });
 
-  // if (error) return <p className="text-danger">{error}</p>;
+  if (error) return <p className="text-danger">{error}</p>;
 
   return (
     <>
-      {/* <section className="header px-5 py-2 my-0">
+    <ToastContainer 
+    position="bottom-right"
+    autoClose={3000}
+    hideProgressBar={false}
+    newestOnTop={true}
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+  />
+    <section className="header px-5 py-2 my-0">
         <div className="d-flex py-3 px-lg-5 justify-content-center gap-3 align-items-center">
           <div className="search py-1 px-2 rounded-2 mt-1 d-flex align-items-center">
             <i className="fa-solid fa-magnifying-glass fa-xl i"></i>
@@ -90,7 +157,7 @@ export default function Jops() {
         </h5>
         
         {isLoading ? (
-          <div className="text-center mt-4">Loading jobs...</div>
+          <Loader/>
         ) : (
           <div className="jops px-5 mt-2 d-flex justify-content-between">
             <div className="right d-flex flex-column align-items-start justify-content-start">
@@ -105,10 +172,10 @@ export default function Jops() {
                   <div
                     key={job.id}
                     className="jop w-100 rounded-2 mb-5 p-3 d-flex justify-content-between align-items-center position-relative"
-                    onClick={() => handleJobClick(job)}
-                    style={{ cursor: "pointer" }}
+                  
                   >
-                    <div className="details">
+                    <div className="details" onClick={() => handleJobClick(job)}
+                    style={{ cursor: "pointer" }}>
                       <div className="name d-flex align-items-center">
                         <img src={work} alt="work image" />
                         <div className="details ms-2 mt-3">
@@ -139,7 +206,11 @@ export default function Jops() {
                         </p>
                       </div>
                     </div>
-                    <i className="fa-regular fa-bookmark"></i>
+<i
+  className={`fa-bookmark i ${savedJobs.has(job.id) ? "fa-solid " : "fa-regular "}`}
+  onClick={() => handleSave(job.id, job.job_type)}
+></i>
+
                   </div>
                 ))
               )}
@@ -174,15 +245,15 @@ export default function Jops() {
 
                   <div className="apply mt-4 w-100 d-flex justify-content-center">
                     <button>
-                      <Link className="link" to={"/fill"}>Apply Now</Link>
+<Link className="link" to={`/fill/${selectedJob.id}`}>Apply Now</Link>
                     </button>
                   </div>
 
                   <div className="JobDeatails d-flex flex-column align-items-start px-2 pt-4">
                     <ul>
                       <dt className="my-2">Minimum Qualifications</dt>
-                      {selectedJob.qualifications && selectedJob.qualifications.length > 0 ? (
-                        selectedJob.qualifications.map((q, i) => <li key={i}>{q}</li>)
+                      {selectedJob.skills && selectedJob.skills.length > 0 ? (
+                        selectedJob.skills.map((q, i) => <li key={i}>{q}</li>)
                       ) : (
                         <li>No qualifications specified</li>
                       )}
@@ -201,7 +272,7 @@ export default function Jops() {
             </aside>
           </div>
         )}
-      </section> */}
+      </section> 
     </>
   );
 }

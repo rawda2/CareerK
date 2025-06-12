@@ -1,0 +1,26 @@
+.task .active{
+    background-color: #7D8AC326 !important;
+    color: var(--primaryColor) !important;
+}
+.task .success{
+    background-color: #4CAF5026 !important;
+    color: #4CAF50 !important;
+
+}
+.task .danger{
+    background-color: #FF00001A !important;
+    color:#F23333 !important;
+  
+}
+.task .arch{
+    background-color: #08040B26 !important;
+    color:#08040BCC !important;
+  
+}
+.task .caption span{
+    font-size: 12px;
+    font-weight: 500;
+}
+.main .link :focus .taskL{
+    color: var(--primaryColor) !important;
+}

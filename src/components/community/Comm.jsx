@@ -10,8 +10,40 @@ import pers6 from './../../assets/pers6.png'
 import pers7 from './../../assets/pers7.png'
 import pers8 from './../../assets/pers8.png'
 import main from './../../assets/work.png'
+import { useNavigate } from "react-router-dom";
 
+export  const communities = [
+    {
+      id: 1,
+      title: "Front End",
+      bio: "Bio about the community Dorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      badges: ["onsite", "remote"],
+      members: [1, 2, 3]
+    },
+    {
+      id: 2,
+      title: "Back End",
+      bio: "Backend development community focusing on server-side technologies.",
+      badges: ["onsite", "hybrid"],
+      members: [4, 5]
+    },
+    {
+      id: 3,
+      title: "UI/UX Design",
+      bio: "Design community for creating beautiful and functional user interfaces.",
+      badges: ["remote", "workshops"],
+      members: [6, 7]
+    },
+    {
+      id: 4,
+      title: "DevOps",
+      bio: "Community for infrastructure, deployment, and automation enthusiasts.",
+      badges: ["onsite", "cloud"],
+      members: [8, 1]
+    },
+  ];
 const Comm = () => {
+  const navigate =useNavigate()
   const members = [
     { id: 1, name: "R", image: pers8},
     { id: 2, name: "F", image: pers2 },
@@ -23,128 +55,54 @@ const Comm = () => {
     { id: 8, name: "L", image: pers1 },
 
   ];
-
+ 
+  const handleCardClick = (id) => {
+    navigate(`/chat/${id}`);
+  };
   return (
     <>
     <section className="all p-5">
-    <div className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center">
-      {/* Left Section */}
-      <div className="d-flex align-items-start">
-        <img src={main} alt="Pitch" className="pitch-logo" />
-        <div className="ms-3">
-          <h5 className="fw-bold">Front End</h5>
-          <p className="text-muted community-bio">
-            Bio about the community Dorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.
-          </p>
-          <h6 className="fw-bold mt-3">What is Included</h6>
-          <span className="badge  me-3">onsite</span>
-          <span className="badge ">onsite</span>
-        </div>
-      </div>
+   {communities.map((comm, index) => (
+        <div
+          key={comm.id}
+          className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center card-hover"
+          onClick={() => handleCardClick(comm.id)}
+          style={{ cursor: "pointer" }}
+        >
+          {/* Left Section */}
+          <div className="d-flex align-items-start">
+            <img src={main} alt="Pitch" className="pitch-logo" />
+            <div className="ms-3">
+              <h5 className="fw-bold">{comm.title}</h5>
+              <p className="text-muted community-bio">{comm.bio}</p>
+              <h6 className="fw-bold mt-3">What is Included</h6>
+              {comm.badges.map((item, idx) => (
+                <span className="badge me-3" key={idx}>{item}</span>
+              ))}
+            </div>
+          </div>
 
-      {/* Right Section - Members */}
-      <div className="ms-auto d-flex align-items-center me-5">
-        <div className="members-group">
-          {members.map((member) => (
-            <OverlayTrigger
-              key={member.id}
-              placement="top"
-              overlay={<Tooltip>{member.name}</Tooltip>}
-            >
-              <img src={member.image} alt={member.name} className="member-avatar" />
-            </OverlayTrigger>
-          ))}
+          {/* Right Section - Members */}
+          <div className="ms-auto d-flex align-items-center me-5">
+            <div className="members-group">
+              {members.map((member) => (
+                <OverlayTrigger
+                  key={member.id}
+                  placement="top"
+                  overlay={<Tooltip>{member.name}</Tooltip>}
+                >
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="member-avatar"
+                  />
+                </OverlayTrigger>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center">
-      {/* Left Section */}
-      <div className="d-flex align-items-start">
-        <img src={main} alt="Pitch" className="pitch-logo" />
-        <div className="ms-3">
-          <h5 className="fw-bold">Front End</h5>
-          <p className="text-muted community-bio">
-            Bio about the community Dorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.
-          </p>
-          <h6 className="fw-bold mt-3">What is Included</h6>
-          <span className="badge  me-3">onsite</span>
-          <span className="badge ">onsite</span>
-        </div>
-      </div>
+      ))}
 
-      {/* Right Section - Members */}
-      <div className="ms-auto d-flex align-items-center me-5">
-        <div className="members-group">
-          {members.map((member) => (
-            <OverlayTrigger
-              key={member.id}
-              placement="top"
-              overlay={<Tooltip>{member.name}</Tooltip>}
-            >
-              <img src={member.image} alt={member.name} className="member-avatar" />
-            </OverlayTrigger>
-          ))}
-        </div>
-      </div>
-    </div> <div className="community-card mb-5 mt-5 py-5 me-4  shadow-sm px-5 d-flex align-items-center">
-      {/* Left Section */}
-      <div className="d-flex align-items-start">
-        <img src={main} alt="Pitch" className="pitch-logo" />
-        <div className="ms-3">
-          <h5 className="fw-bold">Front End</h5>
-          <p className="text-muted community-bio">
-            Bio about the community Dorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.
-          </p>
-          <h6 className="fw-bold mt-3">What is Included</h6>
-          <span className="badge  me-3">onsite</span>
-          <span className="badge ">onsite</span>
-        </div>
-      </div>
-
-      {/* Right Section - Members */}
-      <div className="ms-auto d-flex align-items-center me-5">
-        <div className="members-group">
-          {members.map((member) => (
-            <OverlayTrigger
-              key={member.id}
-              placement="top"
-              overlay={<Tooltip>{member.name}</Tooltip>}
-            >
-              <img src={member.image} alt={member.name} className="member-avatar" />
-            </OverlayTrigger>
-          ))}
-        </div>
-      </div>
-    </div> <div className="community-card mb-5 me-4 mt-5 py-5 shadow-sm px-5 d-flex align-items-center">
-      {/* Left Section */}
-      <div className="d-flex align-items-start">
-        <img src={main} alt="Pitch" className="pitch-logo" />
-        <div className="ms-3">
-          <h5 className="fw-bold">Front End</h5>
-          <p className="text-muted community-bio">
-            Bio about the community Dorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.
-          </p>
-          <h6 className="fw-bold mt-3">What is Included</h6>
-          <span className="badge  me-3">onsite</span>
-          <span className="badge ">onsite</span>
-        </div>
-      </div>
-
-      {/* Right Section - Members */}
-      <div className="ms-auto d-flex align-items-center me-5">
-        <div className="members-group">
-          {members.map((member) => (
-            <OverlayTrigger
-              key={member.id}
-              placement="top"
-              overlay={<Tooltip>{member.name}</Tooltip>}
-            >
-              <img src={member.image} alt={member.name} className="member-avatar" />
-            </OverlayTrigger>
-          ))}
-        </div>
-      </div>
-    </div>
     </section>
   
     </>

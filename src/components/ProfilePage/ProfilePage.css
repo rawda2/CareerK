@@ -32,7 +32,7 @@
 .aside {
   width: 18% !important;
   background-color: #fff;
-  height: 240px;
+  height: 280px;
   margin-left: -20px;
 }
 
@@ -234,4 +234,26 @@
 }
 .btn-danger{
   background-color: #AA1924 !important;
+}
+.saved-jobs .active{
+    background-color: #7D8AC326 !important;
+    color: var(--primaryColor) !important;
+}
+.saved-jobs .success{
+    background-color: #4eff5426 !important;
+    color: #4CAF50 !important;
+
+}
+.saved-jobs .danger{
+    background-color: #FF00001A !important;
+    color:#F23333 !important;
+  
+}
+.job-item .fa-bookmark{
+    position: absolute;
+    cursor: pointer;
+    top: 0px;
+    right: 10px;
+    font-size: 24px;
+  color: var(--primaryColor);
 }

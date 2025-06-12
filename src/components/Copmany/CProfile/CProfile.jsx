@@ -2,7 +2,44 @@ import React from "react";
 import profile from "./../../../assets/profile.png";
 import { Link } from "react-router-dom";
 import "./Cprofile.css";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 export default function CProfile() {
+   const [profile,setProfile]=useState([])
+    const API_URL = import.meta.env.VITE_API_URL;
+    const token = localStorage.getItem("token");
+    const [postedJobs,setPostedJobs]=useState([])
+    const [states,setStates]=useState([])
+
+    const [error, setError] = useState("");
+  
+         useEffect(() => {
+            const fetchProfile = async () => {
+              try {
+                const response = await axios.get(
+                  `${API_URL}/company-profile/profile`,
+                  {
+                    headers: {
+                      "ngrok-skip-browser-warning": "true",
+        
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+                console.log("API Response:", response.data);
+                setProfile(response.data.company);
+                setPostedJobs(response.data.jobPosts);
+                setStates(response.data.states);
+                console.log(postedJobs)
+              } catch (error) {
+                console.error(error);
+                setError("Failed to fetch Profile. Please try again later.");
+              }
+            };
+            fetchProfile();
+          }, []);
+
   return (
     <>
       <section className="Cprofile px-5 py-2 d-flex bg-light flex-column align-items-center  justify-content-center">
@@ -20,7 +57,7 @@ export default function CProfile() {
             </Link>
           </button>
           <div className="details d-flex flex-column py-4 justify-content-center align-items-center w-100 mt-5 text-center">
-            <h4 className=" mt-3 text-center me-4">Company Name</h4>
+            <h4 className=" mt-3 text-center me-4">{profile.name}</h4>
             <p className=" w-50">
               Empowering you to pay in installments for everything you need,
               with ease and convenience.

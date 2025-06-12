@@ -43,6 +43,11 @@ import Done3 from './components/Copmany/PostJop/Done3';
 import PostedJobs from './components/Copmany/PostedJobs/PostedJobs';
 import Notifi from './components/Copmany/Notifi/Notifi';
 import Bot from './components/ChatBot/ChatBot';
+import CustomerL from './components/LayOuts/CustomerL';
+import CustHome from './components/Customer/CusHome/CustHome';
+import Task from './components/Customer/Task/Task';
+import Details from './components/Customer/Details/Details';
+import Applicant from './components/Customer/Applicant/Applicant';
 
 //
 
@@ -64,7 +69,6 @@ const router = createBrowserRouter([
       { path: 'continue', element: <ContinueAs /> },
       { path: 'csignUp', element: <CsignUp /> },
       { path: 'custsignUp', element: <CustSign /> },
-      
     ],
   },
 
@@ -82,14 +86,14 @@ const router = createBrowserRouter([
           { path: 'done', element: <Done /> },
           { path: 'roadmaps', element: <RoadMaps /> },
           { path: 'comm', element: <Comm /> },
-          { path: 'chat', element: <Chat /> },
+          { path: 'chat/:id', element: <Chat /> },
           { path: 'certificate', element: <Certificate /> },
           { path: 'done2', element: <Done2 /> },
           { path: 'profile', element: <Profile /> },
           { path: 'editProfile', element: <ProfilePage /> },
           { path: 'cv', element: <Cv /> },
           { path: 'jops', element: <Jops /> },
-          { path: 'fill', element: <Application /> },
+          { path: 'fill/:id', element: <Application /> },
           { path: 'data', element: <Data /> },
           { path: 'bot', element: <Bot /> },
           { path: 'notifi', element: <Notifi /> },
@@ -108,7 +112,7 @@ const router = createBrowserRouter([
       {
         element: <CompanyL />,
         children: [
-          { path: 'Chome', element: <Chome /> },
+          { path: 'Chome', element: <CProfile /> },
           { path: 'Cprofile', element: <CProfile /> },
           { path: 'Csettings', element: <Settings /> },
           { path: 'postJob', element: <PostJop /> },
@@ -122,7 +126,23 @@ const router = createBrowserRouter([
       },
     ],
   },
+ {
+    element: <ProtectedRoute allowedRoles={[ 'customer']} />,
+    children: [
+      {
+        element: <CustomerL />,
+        children: [
+          { path: 'Cuhome', element: <CustHome /> },
+          { path: 'createTask', element: <Task /> },
+          { path: 'details/:id', element: <Details/> },
+          { path: 'applicant', element: <Applicant/> },
 
+
+
+        ],
+      },
+    ],
+  },
 ]);
 
 

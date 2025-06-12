@@ -20,8 +20,41 @@ import image5 from "./../../assets/6.png";
 import image6 from "./../../assets/7.png";
 import work from "./../../assets/work.png";
 import card from "./../../assets/MasterCard.png";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const ProfilePage = () => {
+  const [jobs1, setJobs] = useState([]);
+  const [saved, setSavedJobs] = useState([]);
+  const [error, setError] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const token = localStorage.getItem("token");
+  console.log(token);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/job-applications/my-applications`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("API Response:", response.data);
+        setJobs(response.data.applications);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to fetch jobs. Please try again later.");
+        setJobs([]);
+      }
+    };
+    fetchJobs();
+  }, []);
   let [current, setCurrent] = useState("profile");
 
   function handleCurrent(current) {
@@ -100,90 +133,106 @@ const ProfilePage = () => {
     },
   ];
 
-  const jobs = [
-    {
-      title: "Senior UX Designer",
-      company: "DesignHub Inc.",
-      location: "remote",
-      team: "Product & Design",
-      salary: "$160k",
-      time: "15 min ago",
-      applied: "8 applied",
-      type: "Full-time",
-    },
-    {
-      title: "Frontend Engineer (React)",
-      company: "TechNova",
-      location: "hybrid",
-      team: "Engineering",
-      salary: "$150k",
-      time: "1 hour ago",
-      applied: "12 applied",
-      type: "Full-time",
-    },
-    {
-      title: "Digital Marketing Specialist",
-      company: "GrowthMasters",
-      location: "remote",
-      team: "Marketing",
-      salary: "$110k",
-      time: "2 hours ago",
-      applied: "5 applied",
-      type: "Contract",
-    },
-    {
-      title: "DevOps Engineer",
-      company: "CloudSecure",
-      location: "onsite",
-      team: "Engineering",
-      salary: "$150k",
-      time: "3 hours ago",
-      applied: "3 applied",
-      type: "Full-time",
-    },
-    {
-      title: "Product Manager",
-      company: "InnovateCo",
-      location: "hybrid",
-      team: "Product",
-      salary: "$190k",
-      time: "5 hours ago",
-      applied: "7 applied",
-      type: "Full-time",
-    },
-    {
-      title: "Data Scientist",
-      company: "AI Labs",
-      location: "remote",
-      team: "Research",
-      salary: "$200k",
-      time: "1 day ago",
-      applied: "9 applied",
-      type: "Full-time",
-    },
-    {
-      title: "Customer Support Rep",
-      company: "ServicePlus",
-      location: "onsite",
-      team: "Operations",
-      salary: "$60k",
-      time: "1 day ago",
-      applied: "20 applied",
-      type: "Part-time",
-    },
-  ];
   const [showPopup, setShowPopup] = useState(false);
 
   const togglePayPopup = () => {
     setShowPopup(!showPopup);
   };
-  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
-  const toggleLogoutPopup = () => {
-    setShowLogoutPopup(!showLogoutPopup);
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "pending":
+        return "badge ms-0  active";
+      case "accepted":
+        return "badge ms-0 success";
+      case "rejected":
+        return "badge ms-0 danger";
+      default:
+        return "badge  secondary";
+    }
+  };
+  const handleWithdraw = async (applicationId) => {
+    try {
+      const response = await axios.delete(
+        `${API_URL}/job-applications/withdraw/${applicationId}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Deleted successfully:", response.data);
+
+      // Update the UI by removing the withdrawn job
+      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== applicationId));
+    } catch (error) {
+      console.error("Error deleting application:", error);
+      alert("Failed to withdraw application. Please try again.");
+    }
+  };
+  useEffect(() => {
+    const getSaved = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/developer-profile/bookmarks`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Saved Jobs:", response.data);
+        setSavedJobs(response.data);
+      } catch (error) {
+        console.error("Error deleting application:", error);
+        alert("Failed to Get Saved Jobs. Please try again.");
+      }
+    };
+    getSaved();
+  }, []);
+  const handleUnSaved = async (post_id) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/developer-profile/bookmark`,
+        { post_id },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("UNSaved successfully:", response.data.message);
+
+      // Update the saved jobs list by filtering out the unsaved job
+      setSavedJobs((prevSaved) =>
+        prevSaved.filter((job) => job.post_id !== post_id)
+      );
+
+      toast.success("Job unsaved successfully");
+    } catch (error) {
+      console.error("Error Saving Job:", error);
+      toast.error("Failed to unsave job. Please try again.");
+    }
   };
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <section className=" d-flex p-4 justify-content-center gap-0 ">
         {current == "profile" ? (
           <Container className="profile-page w-75 mt-1">
@@ -402,49 +451,135 @@ const ProfilePage = () => {
         ) : (
           ""
         )}
-        {current == "jobs" ? (
+        {current === "jobs" ? (
           <Container className="saved-jobs w-75">
             <Card className="mb-4">
               <Card.Body>
-                <Card.Title className=" m-3">Saved Jobs</Card.Title>
-                <ListGroup variant="flush" className="">
-                  {jobs.map((job, index) => (
+                <Card.Title className="m-3">Saved Jobs</Card.Title>
+                <ListGroup variant="flush">
+                  {saved.map((job, index) => (
                     <ListGroup.Item key={index} className="job-item">
-                      <Row>
+                      <Row className=" position-relative">
                         <Col md={2}>
                           <div className="company-logo">
                             <img
                               src={work}
-                              alt={job.company}
+                              alt="Company Logo"
                               className="logo-image"
                             />
                           </div>
                         </Col>
                         <Col md={7}>
                           <div className="job-details">
-                            <h5>{job.title}</h5>
-                            <p>{job.company}</p>
-                            <button className="special_button me-2">
-                              {job.location}
-                            </button>
-                            <button className="special_button">
-                              {job.type}
-                            </button>
+                            <h5>{job.title || "Untitled Job"}</h5>
+                            <p className=" d-flex"><h6 className=" i">Job Type : </h6> {job.job_type}</p>
+                            <p className=" d-flex"><h6 className=" i">Location : </h6> {job.location}</p>
+                            <p className=" d-flex">
+                              <h6 className=" i">Required Skills : </h6>{" "}
+                              {Array.isArray(job.skills)
+                                ? job.skills.join(", ")
+                                 :  "Not specified"}
+                            </p>
+
                             <p>
-                              <small>
-                                {job.time} • {job.applied}
+                              <small className=" d-flex">
+                                <h6 className="i">Created : </h6>{" "}
+                                {new Date(job.created_at).toLocaleString()}
                               </small>
                             </p>
                           </div>
                         </Col>
-                        <Col md={3} className="">
+                        <Col md={3} className=" position-relative">
                           <div className="job-info text-start">
-                            <h6>Team</h6>
-                            <p>{job.team}</p>
+                            <h6 className="i">Post Type</h6>
+
+                            <p>{job.post_type}</p>
+                            <h6 className="i">Salary </h6>
+
+                            <p> {job.salary_range}</p>
+
+                          </div>
+                          <i
+                            className=" fa-bookmark i fa-solid position-absolute "
+                            onClick={() => handleUnSaved(job.post_id)}
+                          ></i>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Container>
+        )  :  null}
+
+        {current === "applied" ? (
+          <Container className="saved-jobs w-75">
+            <Card className="mb-4">
+              <Card.Body>
+                <Card.Title className="m-3">Applied Jobs</Card.Title>
+                <ListGroup variant="flush">
+                  {jobs1.map((job, index) => (
+                    <ListGroup.Item
+                      key={index}
+                      className="job-item  py-5 border-bottom"
+                    >
+                      <Row>
+                        <Col md={2}>
+                          <div className="company-logo mt-3">
+                            <img
+                              src={work}
+                              alt={job.company_name}
+                              className="logo-image"
+                            />
+                          </div>
+                        </Col>
+                        <Col md={7}>
+                          <div className="job-details mt-3">
+                            <h5>{job.company_name}</h5>
+                            <p>{job.title}</p>
+                            <button className="special_button me-2">
+                              {job.years_of_experience} Yrs Exp
+                            </button>
+                            <span className={getStatusClass(job.status)}>
+                              {job.status}
+                            </span>
+                            <p>
+                              <small>
+                                Applied on : {" "}
+                                {new Date(job.created_at).toLocaleDateString()}
+                              </small>
+                            </p>
+                          </div>
+                        </Col>
+                        <Col md={3}>
+                          <div className="job-info text-start">
+                            <h6 className="i">Expected Salary </h6>
+
                             <p className="salary special">
-                              <span>{job.salary}</span>{" "}
+                              <span>{job.expected_salary}$</span>{" "}
                               <span className="light">/Year</span>
                             </p>
+                            <div className="action d-flex flex-column gap-3">
+                              <a
+                                href={job.uploaded_cv}
+                                target="_blank"
+                                download
+                                className=" text-center Btn text-decoration-none"
+                                rel="noreferrer"
+                              >
+                                View CV
+                              </a>
+                              <button className="rounded py-2 btn-outline-danger text-danger">
+                                <i className=" fa-solid fa-trash text-danger me-3"></i>
+                                <Link
+                                  onClick={() => handleWithdraw(job.id)}
+                                  className=" link text-danger"
+                                >
+                                  Withdraw
+                                </Link>
+                              </button>
+                            </div>
                           </div>
                         </Col>
                       </Row>
@@ -457,6 +592,7 @@ const ProfilePage = () => {
         ) : (
           ""
         )}
+
         {current == "pay" ? (
           <Container className="my-4 p-5 bg-white border rounded w-75 position-relative ">
             <h3 className="mx-auto mb-3">Payment Cards</h3>
@@ -467,7 +603,6 @@ const ProfilePage = () => {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <span className="font-weight-bold">ADRBank</span>
                       <i class="fa-solid fa-ellipsis me-3 fa-xl"></i>
-
                     </div>
                     <Card.Text className="mb-3 font-weight-bold">
                       8763 2736 9873 0329
@@ -520,12 +655,13 @@ const ProfilePage = () => {
                 </Card>
               </Col>
             </Row>
-            <Button className="float-right" onClick={togglePayPopup}>Add Card</Button>
+            <Button className="float-right" onClick={togglePayPopup}>
+              Add Card
+            </Button>
           </Container>
         ) : (
           ""
         )}
-
 
         <Container className="aside mt-4 shadow py-3 rounded-4">
           <Card className="profile-menu">
@@ -550,51 +686,67 @@ const ProfilePage = () => {
               </Link>
               <Link
                 className="menu-item rounded-2 mb-2"
+                onClick={() => handleCurrent("applied")}
+              >
+                <i className="fa-solid fa-check-double"></i> My Applications
+              </Link>
+              <Link
+                className="menu-item rounded-2 mb-2"
                 onClick={() => handleCurrent("pay")}
               >
                 <i className="fa-solid fa-credit-card"></i> Payment Options
               </Link>
-              
             </ListGroup>
           </Card>
         </Container>
         {showPopup && (
-        <div className="overlay">
-          <div className="add-card-popup p-4 rounded-4 shadow position-relative text-start">
-            <div className="title d-flex justify-content-between">
-              <h4>Add Card</h4>
-              <i className="fa-solid fa-xmark" onClick={togglePayPopup}></i>
-            </div>
-            <div className="main d-flex justify-content-center align-items-center flex-column">
-              <div className="row mb-3">
-                <div className="col">
-                  <label className="form-label">cvc</label>
-                  <input type="text" className="form-control" placeholder="Cvc" />
+          <div className="overlay">
+            <div className="add-card-popup p-4 rounded-4 shadow position-relative text-start">
+              <div className="title d-flex justify-content-between">
+                <h4>Add Card</h4>
+                <i className="fa-solid fa-xmark" onClick={togglePayPopup}></i>
+              </div>
+              <div className="main d-flex justify-content-center align-items-center flex-column">
+                <div className="row mb-3">
+                  <div className="col">
+                    <label className="form-label">cvc</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Cvc"
+                    />
+                  </div>
+                  <div className="col">
+                    <label className="form-label">Expire Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="1234"
+                    />
+                  </div>
                 </div>
-                <div className="col">
-                  <label className="form-label">Expire Date</label>
-                  <input type="text" className="form-control" placeholder="1234" />
+                <div className="mb-3 w-100">
+                  <label className="form-label">Card Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Card Name"
+                  />
+                </div>
+                <div className="mb-3 w-100">
+                  <label className="form-label">Card Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="8255 5214 5111 4567"
+                  />
                 </div>
               </div>
-              <div className="mb-3 w-100">
-                <label className="form-label">Card Name</label>
-                <input type="text" className="form-control" placeholder="Card Name" />
-              </div>
-              <div className="mb-3 w-100">
-                <label className="form-label">Card Number</label>
-                <input type="text" className="form-control" placeholder="8255 5214 5111 4567" />
-              </div>
+              <button className="btn btn-primary float-right">Save</button>
             </div>
-            <button className="btn btn-primary float-right">Save</button>
           </div>
-        </div>
-      )}
-    
-
-        
+        )}
       </section>
-
-
     </>
   );
 };

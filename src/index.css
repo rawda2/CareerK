@@ -28,6 +28,9 @@
   .i{
     color: var(--primaryColor);
   }
+  .marked{
+    color: red;
+  }
   .textGray{
     color: var(--grayColor);
   }
@@ -80,6 +83,10 @@
   }
   .w-10{
     width: 8%;
+  }
+  .w-5{
+    width: 20px;
+    height: 20px;
   }
   .h3{
     color:var(--secondaryColor) !important;

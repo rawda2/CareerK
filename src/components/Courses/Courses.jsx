@@ -139,7 +139,7 @@ export default function Courses() {
   to={`/course/${course.id}`}
   onClick={()=>handleClick}
         state={{course}}
-        className="course-card text-decoration-none my-2 border  d-flex flex-column  w-40 position-relative"
+        className="course-card text-decoration-none my-2 border  d-flex flex-column  w-70 position-relative"
         >
           <div className="title position-relative d-flex">
           <img
@@ -155,22 +155,23 @@ export default function Courses() {
             <div className="caption p-2 d-flex flex-column justify-content-center align-items-start">
               <h5 className=" text-black">{course.title}</h5>
               <p className=" textGray ">{course.duration}</p>
-             
+               <div className="details d-flex flex-column justify-content-center mt-4  ">
+<div className="detail d-flex gap-2">
+  <i className="fa-solid fa-play span mb-3 "></i>
+  <p>{course.description}</p>
+</div>
+<div className="detail d-flex gap-2">
+  <i className="fa-solid fa-play span mb-3 "></i>
+  <p>{course.description}</p>
+</div>
+
+
+</div>
             </div>
+          
           </div>
           
-<div className="details d-flex flex-column justify-content-center mt-4 ps-3 ">
-<div className="detail d-flex gap-2">
-  <i className="fa-solid fa-play span mb-3 "></i>
-  <p>{course.description}</p>
-</div>
-<div className="detail d-flex gap-2">
-  <i className="fa-solid fa-play span mb-3 "></i>
-  <p>{course.description}</p>
-</div>
 
-
-</div>
           
           </Link>
           

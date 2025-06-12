@@ -9,6 +9,12 @@
     border-top-left-radius: 18px;
     border-bottom-left-radius: 18px;
 }
+.course-card img{
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+    margin-right: 10px;
+
+}
 .span{
     color: var(--primaryColor);
     background-color: #e7ecff;
