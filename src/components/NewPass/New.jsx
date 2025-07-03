@@ -7,6 +7,7 @@ export default function New() {
   const [password, setPassword] = useState('');
   const [confirm_password, setconfirm_password] = useState('');
   const navigate = useNavigate();
+  const API=import.meta.env.VITE_API_URL
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -16,7 +17,7 @@ export default function New() {
 
     try {
       const response = await axios.post(
-        'https://aedb-197-160-222-137.ngrok-free.app/api/password/reset-password',
+        `${API}/password/reset-password`,
         {
           email,
           otp,

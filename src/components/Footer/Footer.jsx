@@ -4,8 +4,8 @@ import logo from './../../assets/logo (2).png'
 
 export default function Footer() {
     return (
-        <footer className="footer mt-0">
-            <div className="footer-container container">
+        <footer className="footer mt-5">
+            <div className="footer-container container ">
                 <div className="footer-section">
                     <div className="logo-section">
                         <img src={logo} alt="Company Logo" className="footer-logo" />

@@ -31,3 +31,12 @@
 .fa-bell ,.fa-xmark{
     cursor: pointer;
 }
+.circle {
+  position: absolute;
+  top: 25px !important;
+  left: 10px !important;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(168, 148, 148) !important;
+  border-radius: 50%;
+}

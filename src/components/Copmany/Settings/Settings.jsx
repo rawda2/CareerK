@@ -31,7 +31,7 @@ export default function Settings() {
                           <Link className=" text-decoration-none">Save</Link>  
                         </button>
                         <button  className="btnn py-2 px-3">
-                          <Link className=" text-decoration-none">Discard</Link>  
+                          <Link className=" text-decoration-none" to={'/Cprofile'}>Discard</Link>  
                         </button>
 
                     </div>
@@ -222,37 +222,6 @@ export default function Settings() {
             ) : (
                 ""
             )}
-
-            <Container className="aside shadow py-3 rounded-4">
-                <Card className="profile-menu">
-                    <ListGroup variant="menu">
-                        <Link
-                            className="menu-item rounded-2 mb-2"
-                            onClick={() => handleCurrent("profile")}
-                        >
-                            <i className="fa-solid fa-user"></i> Edit Profile
-                        </Link>
-                        <Link
-                            className="menu-item rounded-2 mb-2"
-                            onClick={() => handleCurrent("courses")}
-                        >
-                            <i className="fa-solid fa-book-open"></i> Posted Jops
-                        </Link>
-                        <Link
-                            className="menu-item rounded-2 mb-2"
-                            onClick={() => handleCurrent("jobs")}
-                        >
-                            <i className="fa-solid fa-bookmark"></i> Saved Jobs
-                        </Link>
-                        <Link
-                            className="menu-item rounded-2 mb-2"
-                            onClick={() => handleCurrent("pay")}
-                        >
-                            <i className="fa-solid fa-credit-card"></i> Payment Options
-                        </Link>
-                    </ListGroup>
-                </Card>
-            </Container>
 
         </section>
     );

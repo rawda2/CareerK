@@ -24,43 +24,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
 const ProfilePage = () => {
-  const [jobs1, setJobs] = useState([]);
-  const [saved, setSavedJobs] = useState([]);
-  const [error, setError] = useState("");
-  const API_URL = import.meta.env.VITE_API_URL;
-
-  const token = localStorage.getItem("token");
-  console.log(token);
-
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await axios.get(
-          `${API_URL}/job-applications/my-applications`,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("API Response:", response.data);
-        setJobs(response.data.applications);
-      } catch (error) {
-        console.error(error);
-        setError("Failed to fetch jobs. Please try again later.");
-        setJobs([]);
-      }
-    };
-    fetchJobs();
-  }, []);
-  let [current, setCurrent] = useState("profile");
-
-  function handleCurrent(current) {
-    setCurrent(current);
-  }
-
+  
   const courses = [
     {
       id: 1,
@@ -132,12 +96,50 @@ const ProfilePage = () => {
       category: "Web Development",
     },
   ];
+  const [jobs1, setJobs] = useState([]);
+  const [saved, setSavedJobs] = useState([]);
+  const [error, setError] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const token = localStorage.getItem("token");
+  console.log(token);
+  let [current, setCurrent] = useState("profile");
+
+  function handleCurrent(current) {
+    setCurrent(current);
+  }
+
 
   const [showPopup, setShowPopup] = useState(false);
 
   const togglePayPopup = () => {
     setShowPopup(!showPopup);
   };
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/job-application/my-applications`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("API Response Applications:", response.data);
+        setJobs(response.data.applications);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to fetch jobs. Please try again later.");
+        setJobs([]);
+      }
+    };
+    fetchJobs();
+  }, []);
+  
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -154,7 +156,7 @@ const ProfilePage = () => {
   const handleWithdraw = async (applicationId) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/job-applications/withdraw/${applicationId}`,
+        `${API_URL}/job-application/${applicationId}`,
         {
           headers: {
             "ngrok-skip-browser-warning": "true",
@@ -164,32 +166,28 @@ const ProfilePage = () => {
       );
 
       console.log("Deleted successfully:", response.data);
+      toast.success("Application Deleted  successfully");
 
       // Update the UI by removing the withdrawn job
       setJobs((prevJobs) => prevJobs.filter((job) => job.id !== applicationId));
     } catch (error) {
       console.error("Error deleting application:", error);
-      alert("Failed to withdraw application. Please try again.");
     }
   };
   useEffect(() => {
     const getSaved = async () => {
       try {
-        const response = await axios.get(
-          `${API_URL}/developer-profile/bookmarks`,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${API_URL}/bookmarks`, {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         console.log("Saved Jobs:", response.data);
         setSavedJobs(response.data);
       } catch (error) {
-        console.error("Error deleting application:", error);
-        alert("Failed to Get Saved Jobs. Please try again.");
+        console.error("Error get save jobs:", error);
       }
     };
     getSaved();
@@ -197,7 +195,7 @@ const ProfilePage = () => {
   const handleUnSaved = async (post_id) => {
     try {
       const response = await axios.post(
-        `${API_URL}/developer-profile/bookmark`,
+        `${API_URL}/bookmarks`,
         { post_id },
         {
           headers: {
@@ -472,13 +470,17 @@ const ProfilePage = () => {
                         <Col md={7}>
                           <div className="job-details">
                             <h5>{job.title || "Untitled Job"}</h5>
-                            <p className=" d-flex"><h6 className=" i">Job Type : </h6> {job.job_type}</p>
-                            <p className=" d-flex"><h6 className=" i">Location : </h6> {job.location}</p>
                             <p className=" d-flex">
+                              <h6 className=" i">Job Type : </h6> {job.job_type}
+                            </p>
+                            <p className=" d-flex">
+                              <h6 className=" i">Location : </h6> {job.location}
+                            </p>
+                            <p className=" d-flex flex-column">
                               <h6 className=" i">Required Skills : </h6>{" "}
                               {Array.isArray(job.skills)
-                                ? job.skills.join(", ")
-                                 :  "Not specified"}
+                                ? job.skills.join(" ,  ")
+                                : "Not specified"}
                             </p>
 
                             <p>
@@ -489,7 +491,7 @@ const ProfilePage = () => {
                             </p>
                           </div>
                         </Col>
-                        <Col md={3} className=" position-relative">
+                        <Col md={3} className=" position-relative d-flex justify-content-between flex-column">
                           <div className="job-info text-start">
                             <h6 className="i">Post Type</h6>
 
@@ -497,8 +499,9 @@ const ProfilePage = () => {
                             <h6 className="i">Salary </h6>
 
                             <p> {job.salary_range}</p>
-
                           </div>
+                                                      <button className="Btn mb-3"><Link className=" text-decoration-none" to={`/fill/${job.id}`}>Apply This</Link> </button>
+
                           <i
                             className=" fa-bookmark i fa-solid position-absolute "
                             onClick={() => handleUnSaved(job.post_id)}
@@ -511,7 +514,7 @@ const ProfilePage = () => {
               </Card.Body>
             </Card>
           </Container>
-        )  :  null}
+        ) : null}
 
         {current === "applied" ? (
           <Container className="saved-jobs w-75">
@@ -546,7 +549,7 @@ const ProfilePage = () => {
                             </span>
                             <p>
                               <small>
-                                Applied on : {" "}
+                                Applied on :{" "}
                                 {new Date(job.created_at).toLocaleDateString()}
                               </small>
                             </p>

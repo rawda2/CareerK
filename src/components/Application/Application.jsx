@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+
+
 export default function Application() {
   const { id } = useParams();
   const [progress, setProgress] = useState(0);
@@ -15,6 +17,7 @@ export default function Application() {
   let token=localStorage.getItem("token")
 const [errorMessage, setErrorMessage] = useState("");
 
+    const isServiceApplication = location.pathname.includes("/apply-service");
 
  useEffect(() => {
     // Fetch job details using the id if needed
@@ -27,42 +30,63 @@ const [errorMessage, setErrorMessage] = useState("");
       years_of_experience: "",
       expected_salary: "",
       uploaded_cv: null,
+      email:""
     },
-    onSubmit: async (values) => {
+    validationSchema: Yup.object({
+    name: Yup.string().required("Name is required"),
+    phone: Yup.string().required("Phone is required"),
+    years_of_experience: Yup.number()
+      .typeError("Must be a number")
+      .required("Experience is required"),
+    expected_salary: Yup.number()
+      .typeError("Must be a number")
+      .required("Salary is required"),
+    uploaded_cv: Yup.mixed().required("CV is required"),
+    email: isServiceApplication
+      ? Yup.string()
+          .email("Invalid email format")
+          .required("Email is required for service applications")
+      : Yup.string(),
+  }),
+   onSubmit: async (values) => {
   try {
     const formData = new FormData();
     formData.append("name", values.name);
-formData.append("phone", values.phone);
-formData.append("years_of_experience", values.years_of_experience);
-formData.append("expected_salary", values.expected_salary);
-formData.append("uploaded_cv", values.uploaded_cv);
+    formData.append("phone", values.phone);
+    formData.append("years_of_experience", values.years_of_experience);
+    formData.append("expected_salary", values.expected_salary);
+    formData.append("uploaded_cv", values.uploaded_cv);
+
+    if (isServiceApplication) {
+      formData.append("service_post_id", id);
+      formData.append("email", values.email);
+
+    }
 
     const response = await axios.post(
-      `${url}/job-applications/apply/${id}`,
+      `${url}/${isServiceApplication ? "service-application/apply" : `job-application/apply/${id}`}`,
       formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
-          
         },
-        
       }
     );
 
     console.log("Success:", response.data);
     setProgress(100);
-    SetFormNO(2); // Show success message
+    SetFormNO(2);
   } catch (error) {
-  console.error("Error submitting form:", error);
-  if (error.response && error.response.data && error.response.data.message) {
-    setErrorMessage(error.response.data.message);
-  } else {
-    setErrorMessage("Something went wrong. Please try again.");
+    console.error("Error submitting form:", error);
+    if (error.response?.data?.message) {
+      setErrorMessage(error.response.data.message);
+    } else {
+      setErrorMessage("Something went wrong. Please try again.");
+    }
   }
-}
-
 },
+
 
   });
 
@@ -140,6 +164,15 @@ formData.append("uploaded_cv", values.uploaded_cv);
                   onChange={formik.handleChange}
                 />
               </div>
+              {isServiceApplication?<div className="input bg-light d-flex flex-column w-100">
+                <label>Email</label>
+                <input
+                  type="text"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                />
+              </div>:""}
               <div className="input bg-light d-flex flex-column w-100">
                 <label>Phone Number</label>
                 <input

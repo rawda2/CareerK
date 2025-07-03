@@ -1,5 +1,5 @@
 import React from 'react'
-import profile from './../../assets/profile.png'
+import profileImg from './../../assets/profile.png'
 import './Profile.css'
 import cert1 from './../../assets/cert1.png'
 import cert2 from './../../assets/cert2.png'
@@ -51,7 +51,7 @@ export default function Profile() {
           <div className="card mb-4 shadow">
             <div className="card-body text-center p-0 position-relative">
               <div className="profile-header p-0 mb-5">
-                <img src={profile} alt="Profile" className="profile-image rounded-circle" />
+                <img src={profileImg} alt="Profile" className="profile-image rounded-circle" />
               </div>
               <button className="btn btn1 mt-5 text-light"><Link className='link text-decoration-none' to={'/editProfile'}>Edit Profile</Link></button>
 

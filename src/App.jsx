@@ -27,11 +27,11 @@ import Done2 from './components/Certificate/Done2';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import Profile from './components/Profile/Profile';
 import Cv from './components/Cv/Cv';
-import Jops from './components/Jops/Jops';
+import Jobs from './components/Jops/Jobs';
 import Application from './components/Application/Application';
-import Data from './components/Jops/Data/Data';
+import Data from './components/Jobs/Data/Data';
  // Company Components
-import Chome from './components/Copmany/Chome/Chome';
+// import Chome from './components/Copmany/Chome/Chome';
 import CsignUp from './components/CsignUp/CsignUp';
 import CProfile from './components/Copmany/CProfile/CProfile';
 //Customer
@@ -47,7 +47,9 @@ import CustomerL from './components/LayOuts/CustomerL';
 import CustHome from './components/Customer/CusHome/CustHome';
 import Task from './components/Customer/Task/Task';
 import Details from './components/Customer/Details/Details';
-import Applicant from './components/Customer/Applicant/Applicant';
+import CourseList from './components/Courses/CourseList/CourseList';
+import NotFound from './components/NotFound/NotFound';
+import ChatPage from './components/PrivateChat/ChatPage';
 
 //
 
@@ -69,6 +71,8 @@ const router = createBrowserRouter([
       { path: 'continue', element: <ContinueAs /> },
       { path: 'csignUp', element: <CsignUp /> },
       { path: 'custsignUp', element: <CustSign /> },
+      { path: '*', element: <NotFound /> },
+
     ],
   },
 
@@ -94,9 +98,13 @@ const router = createBrowserRouter([
           { path: 'cv', element: <Cv /> },
           { path: 'jops', element: <Jops /> },
           { path: 'fill/:id', element: <Application /> },
+          { path: 'apply-service/:id', element: <Application /> },
           { path: 'data', element: <Data /> },
           { path: 'bot', element: <Bot /> },
           { path: 'notifi', element: <Notifi /> },
+          { path: 'courseList', element: <CourseList /> },
+         {path:'privateChat',element:<ChatPage/>}
+
 
 
 
@@ -121,6 +129,8 @@ const router = createBrowserRouter([
           { path: 'notifi', element: <Notifi /> },
           { path: 'bot', element: <Bot /> },
           { path: 'Cnotifi', element: <Notifi /> },
+         {path:'Chatprivate',element:<ChatPage/>}
+
 
         ],
       },
@@ -134,11 +144,15 @@ const router = createBrowserRouter([
         children: [
           { path: 'Cuhome', element: <CustHome /> },
           { path: 'createTask', element: <Task /> },
+          { path: 'editTask/:id', element: <Task /> },
           { path: 'details/:id', element: <Details/> },
-          { path: 'applicant', element: <Applicant/> },
+          { path: 'CUnotifi', element: <Notifi /> },
+         {path:'Chat',element:<ChatPage/>}
+            
+          // { path: 'applicant', element: <Applicant/> },
 
 
-
+ 
         ],
       },
     ],

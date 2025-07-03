@@ -7,11 +7,12 @@ import Left from '../Left/Left';
 export default function Reset() {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
-
+  const API=import.meta.env.VITE_API_URL
+   
   const handleSendOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://aedb-197-160-222-137.ngrok-free.app/api/password/forgot-password', { email });
+      const response = await axios.post(`${API}/password/forgot-password`, { email });
       console.log(response.data);
       console.log("otp sent successfully")
       localStorage.setItem('resetEmail', email);

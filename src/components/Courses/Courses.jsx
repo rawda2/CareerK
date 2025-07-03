@@ -2,14 +2,12 @@ import React from "react";
 import "./Courses.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import image1 from './../../assets/1.png'
-import image2 from './../../assets/2.png'
-import image3 from './../../assets/3.png'
-import image4 from './../../assets/5.png'
-import image5 from './../../assets/6.png'
-import image6 from './../../assets/7.png'
-
-
+import image1 from "./../../assets/1.png";
+import image2 from "./../../assets/2.png";
+import image3 from "./../../assets/3.png";
+import image4 from "./../../assets/5.png";
+import image5 from "./../../assets/6.png";
+import image6 from "./../../assets/7.png";
 
 export default function Courses() {
   // Define real course data
@@ -78,12 +76,12 @@ export default function Courses() {
     // Add more courses as needed
   ]);
 
-  const handleClick=()=>{
+  const handleClick = () => {
     window.scrollTo({
       top: 300,
       behavior: "smooth",
     });
-  }
+  };
 
   return (
     <>
@@ -134,47 +132,40 @@ export default function Courses() {
       </section>
       <section className="body py-3 px-3 d-flex  flex-wrap align-items-center justify-content-center gap-3 w-100">
         {courses.map((course) => (
-            <Link
-  key={course.id}
-  to={`/course/${course.id}`}
-  onClick={()=>handleClick}
-        state={{course}}
-        className="course-card text-decoration-none my-2 border  d-flex flex-column  w-70 position-relative"
-        >
-          <div className="title position-relative d-flex">
-          <img
-              src={course.image}
-              alt={course.title}
-              className="course-image  "
-              style={{ width: "30%", height: "100%", objectFit: "cover" }}
-            />
-            <span className="span d-flex justify-content-center text-start gap-0  align-items-center me-2 py-1 px-2  rounded-5 position-absolute top-0 end-0">
-              {course.category}
-            </span>
+          <Link
+            key={course.id}
+            to={`/course/${course.id}`}
+            onClick={() => handleClick}
+            state={{ course }}
+            className="course-card text-decoration-none my-2 border  d-flex flex-column  w-70 position-relative"
+          >
+            <div className="title position-relative d-flex">
+              <img
+                src={course.image}
+                alt={course.title}
+                className="course-image  "
+                style={{ width: "30%", height: "100%", objectFit: "cover" }}
+              />
+              <span className="span d-flex justify-content-center text-start gap-0  align-items-center me-2 py-1 px-2  rounded-5 position-absolute top-0 end-0">
+                {course.category}
+              </span>
 
-            <div className="caption p-2 d-flex flex-column justify-content-center align-items-start">
-              <h5 className=" text-black">{course.title}</h5>
-              <p className=" textGray ">{course.duration}</p>
-               <div className="details d-flex flex-column justify-content-center mt-4  ">
-<div className="detail d-flex gap-2">
-  <i className="fa-solid fa-play span mb-3 "></i>
-  <p>{course.description}</p>
-</div>
-<div className="detail d-flex gap-2">
-  <i className="fa-solid fa-play span mb-3 "></i>
-  <p>{course.description}</p>
-</div>
-
-
-</div>
+              <div className="caption p-2 d-flex flex-column justify-content-center align-items-start">
+                <h5 className=" text-black">{course.title}</h5>
+                <p className=" textGray ">{course.duration}</p>
+                <div className="details d-flex flex-column justify-content-center  ">
+                  <div className="detail d-flex gap-2">
+                    <i className="fa-solid fa-play span mb-3 "></i>
+                    <p>{course.description}</p>
+                  </div>
+                  <div className="detail d-flex gap-2">
+                    <i className="fa-solid fa-play span mb-3 "></i>
+                    <p>{course.description}</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          
-          </div>
-          
-
-          
           </Link>
-          
         ))}
       </section>
     </>

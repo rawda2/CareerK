@@ -1,5 +1,5 @@
 import React from "react";
-import profile from "./../../../assets/profile.png";
+import profileimg from "./../../../assets/profile.png";
 import { Link } from "react-router-dom";
 import "./Cprofile.css";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function CProfile() {
             const fetchProfile = async () => {
               try {
                 const response = await axios.get(
-                  `${API_URL}/company-profile/profile`,
+                  `${API_URL}/company/profile `,
                   {
                     headers: {
                       "ngrok-skip-browser-warning": "true",
@@ -28,10 +28,7 @@ export default function CProfile() {
                   }
                 );
                 console.log("API Response:", response.data);
-                setProfile(response.data.company);
-                setPostedJobs(response.data.jobPosts);
-                setStates(response.data.states);
-                console.log(postedJobs)
+                setProfile(response.data) ;                                                                                                                                                                                                                                                                                                         
               } catch (error) {
                 console.error(error);
                 setError("Failed to fetch Profile. Please try again later.");
@@ -46,18 +43,18 @@ export default function CProfile() {
         <div className="main w-90 mt-4 shadow mb-2 div">
           <div className="profile-header p-0 mb-5">
             <img
-              src={profile}
+              src={profileimg}
               alt="Profile"
               className="profile-image rounded-circle"
             />
           </div>
-          <button className="btn btn1 mt-5 text-light">
-            <Link className="link text-decoration-none" to={'/Csettings'}>
+          <button className="btn btn1 mt-5 text-light me-3">
+            <Link className="link text-decoration-none " to={'/Csettings'}>
               edit profile{" "}
             </Link>
           </button>
           <div className="details d-flex flex-column py-4 justify-content-center align-items-center w-100 mt-5 text-center">
-            <h4 className=" mt-3 text-center me-4">{profile.name}</h4>
+            <h4 className=" mt-3 text-center  text-black">{profile.company_name}</h4>
             <p className=" w-50">
               Empowering you to pay in installments for everything you need,
               with ease and convenience.

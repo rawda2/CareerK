@@ -33,6 +33,7 @@
 .my-message {
   margin-left: auto;
   margin-right: 0;
+  background-color: rgb(135, 168, 168) !important;
 }
 
 /* Others' messages - aligned left */
@@ -63,4 +64,26 @@
 }
 .Btn i{
   color: #ece9e9 !important;
+}
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Number of lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

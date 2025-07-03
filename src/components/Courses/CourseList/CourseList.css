@@ -1,0 +1,4 @@
+@import "tailwindcss";
+.fa-star,.fa-star-half-stroke{
+    font-size: 15px !important;
+}

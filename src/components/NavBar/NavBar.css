@@ -56,3 +56,16 @@
    cursor: pointer;
    color: #AA1924 !important;
  }
+.notify{
+  width: 500px !important;
+  height: 300px !important;
+}
+.circle {
+  position: absolute;
+  top: 25px !important;
+  left: 10px !important;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(168, 148, 148) !important;
+  border-radius: 50%;
+}

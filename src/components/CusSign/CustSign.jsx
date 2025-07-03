@@ -43,7 +43,7 @@ export default function CustSign() {
         reader.onloadend = () => {
           setPhoto(reader.result);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDatalL(file);
         formik.setFieldValue("profile_picture", file);
       } else {
         alert("Profile picture is too large. Max size is 12MB.");

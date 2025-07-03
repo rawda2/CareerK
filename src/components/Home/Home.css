@@ -5,7 +5,7 @@
  input:focus{
    border: 0 !important;
    outline: none !important; 
-  box-shadow: none !important; /
+  box-shadow: none !important; 
 }
 .home .search .find{
  
@@ -243,3 +243,15 @@ a{
     font-family: 600;
 }
 
+.course img{
+   width: 300px;
+   height: 250px;
+   
+}
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Number of lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

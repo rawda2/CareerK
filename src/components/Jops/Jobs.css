@@ -72,3 +72,8 @@ font-weight: 500;
     background-color: var(--primaryColor);
     border-radius: 10px;
 }
+.d-flex .active{
+     background-color: var(--secondaryColor);
+    color: #fff;
+    border: none;
+}

@@ -1,4 +1,3 @@
-// src/components/Message.jsx
 import { ListGroupItem } from "react-bootstrap";
 import { format } from 'date-fns';
 
@@ -13,19 +12,17 @@ const Message = ({ text, sender, isMe, isSystem }) => {
         width: isSystem ? '100%' : 'fit-content',
         maxWidth: '75%',
         marginLeft: isMe ? 'auto' : '0',
-        backgroundColor: isMe ? '#EDF1FF' : '#F9F9F9',
-        color: isSystem ? '#6c757d' : 'inherit',
+        backgroundColor: isMe ? '#7D8AC3':'#384579',
+        color: isSystem ? '#fff' : '#fff',
         boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
       }}
     >
       {!isSystem && (
         <div className={`d-flex justify-content-between align-items-baseline ${isMe ? 'flex-row-reverse' : ''}`}>
-          <small className="text-muted">
+          <small className=" text-light ">
             <strong>{isMe ? 'You' : sender}</strong>
           </small>
-          <small className="text-muted me-3" style={{ fontSize: '0.7rem' }}>
-            {timestamp}
-          </small>
+         
         </div>
       )}
       <div className={`${isMe ? 'text-end' : ''}`}>{text}</div>
@@ -34,6 +31,13 @@ const Message = ({ text, sender, isMe, isSystem }) => {
           {timestamp}
         </small>
       )}
+     
+          {sender=="me"?<small className="text-light d-flex flex-row " style={{ fontSize: '0.7rem' }}>
+            {timestamp}
+          </small>:<small className="text-light d-flex flex-row-reverse " style={{ fontSize: '0.7rem' }}>
+            {timestamp}
+          </small>}
+      
     </ListGroupItem>
   );
 };

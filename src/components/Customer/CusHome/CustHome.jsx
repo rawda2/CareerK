@@ -1,205 +1,211 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "./CustHome.css";
 import { Link } from "react-router-dom";
-const tasks = [
-  {
-    id: 1,
-    status: "Active",
-    title: "Senior UI/UX Designer Needed",
-    description: "Looking for an experienced UI/UX designer to enhance our app’s UX.",
-    date: "February 23, 2023",
-    time: "10:30 AM",
-    applications: 15,
-    applicants: [
-      {
-        id: 1,
-        name: "Ali Hassan",
-        role: "UI Designer",
-        price: "$900",
-        duration: "20 Days",
-        desc: "Qorem ipsum dolor sit amet, consectetur adipiscing elit...",
-        jobsCompleted: 35,
-        experienceYears: 5,
-        previousJobs: "Redesigned mobile app for XYZ Bank; Worked on SaaS dashboard for Fintech startup"
-      },
-      {
-        id: 2,
-        name: "Sara Mohamed",
-        role: "UX Expert",
-        price: "$1100",
-        duration: "25 Days",
-        desc: "Qorem ipsum dolor sit amet, consectetur adipiscing elit...",
-        jobsCompleted: 42,
-        experienceYears: 6,
-        previousJobs: "Led UX audit for e-commerce site; UX revamp of healthcare platform"
-      }
-    ],
-    daysToComplete: 25,
-    totalMoney: 2000
-  },
-  {
-    id: 2,
-    status: "Complete",
-    title: "Senior UI/UX Designer",
-    description: "Seeking a talented UI/UX designer to create engaging interfaces.",
-    date: "February 13, 2023",
-    time: "11:30 AM",
-    applications: 15,
-    applicants: [
-      {
-        id: 3,
-        name: "Kareem Youssef",
-        role: "UX Researcher",
-        price: "$1000",
-        duration: "22 Days",
-        desc: "Qorem ipsum dolor sit amet, consectetur adipiscing elit...",
-        jobsCompleted: 28,
-        experienceYears: 4,
-        previousJobs: "Conducted user research for logistics app; Interviews for government portal"
-      }
-    ],
-    daysToComplete: 22,
-    totalMoney: 1000
-  },
-  {
-    id: 3,
-    status: "Remove",
-    title: "Marketing Specialist Needed",
-    description: "Looking for a marketing specialist to handle social media campaigns.",
-    date: "February 25, 2023",
-    time: "10:30 AM",
-    applications: 10,
-    applicants: [
-      {
-        id: 4,
-        name: "Mona Elsayed",
-        role: "Social Media Expert",
-        price: "$800",
-        duration: "15 Days",
-        desc: "Qorem ipsum dolor sit amet, consectetur adipiscing elit...",
-        jobsCompleted: 50,
-        experienceYears: 7,
-        previousJobs: "Managed campaigns for fashion brand; Scaled TikTok presence for startup"
-      }
-    ],
-    daysToComplete: 15,
-    totalMoney: 800
-  },
-  {
-    id: 4,
-    status: "Active",
-    title: "Senior UI/UX Designer Needed",
-    description: "Looking for an experienced UI/UX designer to enhance our app’s UX.",
-    date: "February 23, 2023",
-    time: "10:30 AM",
-    applications: 15,
-    applicants: [],
-    daysToComplete: 0,
-    totalMoney: 0
-  },
-  {
-    id: 5,
-    status: "Remove",
-    title: "Marketing Specialist Needed",
-    description: "Looking for a marketing specialist to handle social media campaigns.",
-    date: "February 25, 2023",
-    time: "10:30 AM",
-    applications: 10,
-    applicants: [],
-    daysToComplete: 0,
-    totalMoney: 0
-  },
-  {
-    id: 6,
-    status: "Archive",
-    title: "Senior UI/UX Designer",
-    description: "Seeking a talented UI/UX designer to create engaging interfaces.",
-    date: "February 13, 2023",
-    time: "11:30 AM",
-    applications: 15,
-    applicants: [
-      {
-        id: 5,
-        name: "Omar Farouk",
-        role: "UI/UX Designer",
-        price: "$950",
-        duration: "18 Days",
-        desc: "Qorem ipsum dolor sit amet, consectetur adipiscing elit...",
-        jobsCompleted: 31,
-        experienceYears: 5,
-        previousJobs: "Built UI system for project management app; Freelance work on Upwork"
-      }
-    ],
-    daysToComplete: 18,
-    totalMoney: 650
-  }
-];
-
-
-
+import "./CustHome.css";
+import Loader from "../../Loader/Loader";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const getStatusClass = (status) => {
-  switch (status) {
-    case "Active":
-      return "badge ms-0  active";
-    case "Complete":
-      return "badge ms-0 success";
-    case "Remove":
-      return "badge ms-0 danger";
-    case "Archive":
-      return "badge ms-0  arch";
-
-    default:
-      return "badge  secondary";
-  }
+  const map = {
+    Active: "badge ms-0 active",
+    Complete: "badge ms-0 success",
+    Remove: "badge ms-0 danger",
+    Archive: "badge ms-0 arch",
+  };
+  return map[status] || "badge ms-0 secondary";
 };
 
 export default function CustHome() {
+  const [menuOpenId, setMenuOpenId] = useState(null);
+  const [services, setServices] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/customer/service-posts-with-applicant-details`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+            withCredentials: false,
+            validateStatus: function (status) {
+              return status === 200;
+            },
+          }
+        );
+
+        // Check if response is HTML (ngrok intercept)
+        if (
+          typeof response.data === "string" &&
+          response.data.includes("<!DOCTYPE html>")
+        ) {
+          throw new Error(
+            "API request was intercepted. Check your backend URL and configuration."
+          );
+        }
+
+        if (response.data) {
+          setServices(response.data);
+          console.log(response.data)
+        } else {
+          throw new Error("Unexpected API response format");
+        }
+      } catch (err) {
+        console.error("API Error:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchServices();
+  }, []);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/customer/service-posts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+      setServices((prev) => prev.filter((service) => service.id !== id));
+      setMenuOpenId(null);
+      toast.success("Task Deleted successfully!");
+    } catch (err) {
+      console.error("Failed to delete service:", err);
+      toast.error("Task Deletion Fail !");
+      
+    }
+  };
+
+  const toggleMenu = (id) => {
+    setMenuOpenId((prevId) => (prevId === id ? null : id));
+  };
+
+  if (error) {
+    return <div className="px-5 mt-5 text-danger">Error: {error}</div>;
+  }
+
   return (
     <>
-      <section className="main px-5 mt-5">
-        <nav className="px-5 d-flex justify-content-between align-items-center">
-          <h3>Tasks</h3>
-          <button className="Btn py-1">
-            <i className="p-0 bg-transparent text-light fa-solid fa-plus"></i>{" "}
-            <Link className="link" to={"/createTask"}>
-              New Task
-            </Link>
-          </button>
-        </nav>
+     <ToastContainer 
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      /> 
+         <section className="main px-5 mt-5">
+      
+      <nav className="px-5 d-flex justify-content-between align-items-center">
+        <h3>Services</h3>
+        <button className="Btn py-1 ">
+          <Link className="link text-light" to={"/createTask"}>
+            New Service
+          </Link>
+        </button>
+      </nav>
 
-        <Container className=" py-5">
-          <Row xs={1} md={2} lg={3} className="g-4">
-            {tasks.map((task) => (
-              <Col key={task.id}>
-                <Link
-                  to={`/details/${task.id}`} state={{task}}
-                  className="text-decoration-none text-dark"
-                >
-                  <div className="p-3 task shadow-sm rounded border bg-white h-100">
-                    <span className={getStatusClass(task.status)}>
-                      {task.status}
-                    </span>
-                    <h6 className="mt-2">{task.title}</h6>
-                    <p className="text-muted small">{task.description}</p>
-                    <div className="caption d-flex justify-content-between align-items-center text-muted small">                
-                        <span className="ms-0">
-                        {task.date} - {task.time}
-                      </span>
-                      <span className="ms-0">
-                        {task.applications} Application
-                        {task.applications > 1 ? "s" : ""}
-                      </span>
+      {loading ? (
+        <div className="px-5 mt-5">
+          <Loader />
+        </div>
+      ) : (
+        <Container className="py-5">
+          {services.length > 0 ? (
+            <Row xs={1} md={2} lg={3} className="g-4">
+              {services.map((svc) => (
+                <Col key={svc.id} className="position-relative">
+                  <Link
+                    to={`/details/${svc.id}`}
+                    state={{ svc }}
+                    className="text-decoration-none text-dark "
+                  >
+                    <div className="p-3 task shadow-sm rounded border bg-white h-100 d-flex flex-column justify-content-between">
+                      <nav className=" d-flex justify-content-between align-items-center">
+                        <span className={getStatusClass("Active")}>Active</span>
+                        <i
+                          className="fa-solid fa-ellipsis-h bg-transparent"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleMenu(svc.id);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        ></i>{" "}
+                      </nav>
+                      <h6 className="mt-2">{svc.title}</h6>
+                      <p className="text-muted small">{svc.description}</p>
+                      <p className="text-muted small">
+                        {" "}
+                        {svc.required_skills?.join(", ") ||
+                          "No skills specified"}
+                      </p>
+                      <div className="caption d-flex justify-content-between ms-0 ps-0  text-muted small">
+                        <span className=" ms-0">
+                          {" "}
+                          Created At :{" "}
+                          {new Date(svc.postedDate).toLocaleDateString()}
+                        </span>
+                        <span>
+                          {svc.serviceType}
+                          {/* DeadLine:{" "}
+                          {new Date(svc.deadline).toLocaleDateString()} */}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </Col>
-            ))}
-          </Row>
+                  </Link>
+
+                    {menuOpenId === svc.id && (
+                      <div
+                        className="dropdown-menu show position-absolute top-10 end-10 mt-2 p-2 border bg-white shadow rounded"
+                        style={{ zIndex: 10 }}
+                      >
+                        <button
+                          className="dropdown-item text-warning"
+                        >
+                          Edit Post
+                        </button>
+                        <button
+                          className="dropdown-item text-danger"
+                          onClick={() => handleDelete(svc.id)}
+                        >
+                          Delete
+                        </button>
+                        
+                      </div>
+                    )}
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            !loading && !error && <p className="px-5">No services available</p>
+          )}
         </Container>
-      </section>
+      )}
+    </section>
     </>
+ 
   );
 }

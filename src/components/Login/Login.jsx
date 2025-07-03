@@ -44,6 +44,9 @@ export default function Login() {
         console.log(response.data.accessToken)
         const userType=response.data.user.role;
         localStorage.setItem("role",userType)
+        localStorage.setItem("user", JSON.stringify({ id: response.data.user.id, name: "Rawda" }));
+localStorage.setItem("user_id",response.data.user.id); // wherever login is successful
+
         if(userType=="developer"){
           navigate('/home');
         }

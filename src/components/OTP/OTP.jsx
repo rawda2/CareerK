@@ -9,12 +9,13 @@ import axios from 'axios';
 
 export default function OTP() {
   const [otp, setOtp] = useState("");
+  const API=import.meta.env.VITE_API_URL
   const navigate = useNavigate();
 
   const handleVerifyOtp = async () => {
     const email = localStorage.getItem('resetEmail'); // <--- get email
     try {
-      const response = await axios.post('https://aedb-197-160-222-137.ngrok-free.app/api/password/verify-otp', { otp ,email });
+      const response = await axios.post(`${API}/password/verify-otp`, { otp ,email });
       console.log(response.data);
       localStorage.setItem('OTP',otp); 
 
