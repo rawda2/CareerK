@@ -5,23 +5,16 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function Settings() {
+export default function EditProfile() {
       const [loading,setLoading]=useState(false)
     
     const API_URL = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem("token");
     const [formData, setFormData] = useState({
-        company_name: "",
+        name: "",
         brief_description: "",
-        country: "",
-        city: "",
-        address: "",
-        website: "",
-        industry: "",
-        contact_name: "",
         contact_email: "",
         phone_number: "",
-        social_media_links: "",
     });
     
     const [profilePicture, setProfilePicture] = useState(null);
@@ -34,7 +27,7 @@ export default function Settings() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`${API_URL}/company/profile`, {
+                const response = await axios.get(`${API_URL}/customer/profile`, {
                     headers: {
                         "ngrok-skip-browser-warning": "true",
                         Authorization: `Bearer ${token}`,
@@ -71,7 +64,7 @@ export default function Settings() {
         setLoading(true)
         try {
             // First update regular profile data
-            await axios.patch(`${API_URL}/company/edit-profile`, formData, {
+            await axios.patch(`${API_URL}/customer/edit-profile`, formData, {
                 headers: {
                     "ngrok-skip-browser-warning": "true",
                     Authorization: `Bearer ${token}`,
@@ -83,7 +76,7 @@ export default function Settings() {
                 const formDataImg = new FormData();
                 formDataImg.append('profile_picture', profilePicture);
 
-                await axios.patch(`${API_URL}/company/edit-profile`, formDataImg, {
+                await axios.patch(`${API_URL}/customer/edit-profile`, formDataImg, {
                     headers: {
                         "ngrok-skip-browser-warning": "true",
                         Authorization: `Bearer ${token}`,
@@ -91,9 +84,8 @@ export default function Settings() {
                     },
                 });
             }
-
             toast.success("Profile updated successfully!");
-            navigate('/Cprofile');
+            navigate('/CusProfile');
         } catch (error) {
             console.error("Error updating profile:", error);
             toast.error("Failed to update profile");
@@ -128,25 +120,25 @@ export default function Settings() {
                 
                 <Card className="mb-4 card rounded-4 p-4">
                     <Card.Body>
-                        <Card.Title>Company Information</Card.Title>
+                        <Card.Title>Customer Information</Card.Title>
                         <Form className="form py-4 position-relative" onSubmit={handleSubmit}>
                             <Row className="mb-3">
                                 <Col>
-                                    <Form.Group controlId="companyname">
-                                        <Form.Label>Company Name</Form.Label>
+                                    <Form.Group controlId="customername">
+                                        <Form.Label>Customer Name</Form.Label>
                                         <Form.Control
                                             className="rounded-3"
                                             type="text"
-                                            name="company_name"
-                                            value={formData.company_name}
+                                            name="name"
+                                            value={formData.name}
                                             onChange={handleChange}
-                                            placeholder="Company Name"
+                                            placeholder="Customer Name"
                                         />
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group controlId="email">
-                                        <Form.Label>Email Address</Form.Label>
+                                        <Form.Label>Contact Email </Form.Label>
                                         <Form.Control
                                             className="rounded-3"
                                             type="email"
@@ -172,112 +164,9 @@ export default function Settings() {
                                         />
                                     </Form.Group>
                                 </Col>
-                                <Col>
-                                    <Form.Group controlId="industry">
-                                        <Form.Label>Industry</Form.Label>
-                                        <Form.Control 
-                                            className="rounded-3" 
-                                            as="select"
-                                            name="industry"
-                                            value={formData.industry}
-                                            onChange={handleChange}
-                                        >
-                                            <option value="">Select industry</option>
-                                            {industries.map(ind => (
-                                                <option key={ind} value={ind}>{ind}</option>
-                                            ))}
-                                        </Form.Control>
-                                    </Form.Group>
-                                </Col>
+                                
                             </Row>
-                            <Row className="mb-3">
-                                <Col>
-                                    <Form.Group controlId="country">
-                                        <Form.Label>Country</Form.Label>
-                                        <Form.Control 
-                                            className="rounded-3" 
-                                            as="select"
-                                            name="country"
-                                            value={formData.country}
-                                            onChange={handleChange}
-                                        >
-                                            <option value="">Select Country</option>
-                                            {countries.map(country => (
-                                                <option key={country} value={country}>{country}</option>
-                                            ))}
-                                        </Form.Control>
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group controlId="website">
-                                        <Form.Label>Website URL</Form.Label>
-                                        <Form.Control
-                                            className="rounded-3"
-                                            type="text"
-                                            name="website"
-                                            value={formData.website}
-                                            onChange={handleChange}
-                                            placeholder="ex. https://example.com"
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Row className="mb-3">
-                                <Col>
-                                    <Form.Group controlId="address">
-                                        <Form.Label>Address</Form.Label>
-                                        <Form.Control
-                                            className="rounded-3"
-                                            type="text"
-                                            name="address"
-                                            value={formData.address}
-                                            onChange={handleChange}
-                                            placeholder="address"
-                                        />
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group controlId="socialMedia">
-                                        <Form.Label>Social Media URL</Form.Label>
-                                        <Form.Control
-                                            className="rounded-3"
-                                            type="text"
-                                            name="social_media_links"
-                                            value={formData.social_media_links}
-                                            onChange={handleChange}
-                                            placeholder="ex. https://facebook.com"
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Row className="mb-3">
-                                <Col>
-                                    <Form.Group controlId="contactName">
-                                        <Form.Label>Contact Name</Form.Label>
-                                        <Form.Control
-                                            className="rounded-3"
-                                            type="text"
-                                            name="contact_name"
-                                            value={formData.contact_name}
-                                            onChange={handleChange}
-                                            placeholder="Contact Person Name"
-                                        />
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group controlId="city">
-                                        <Form.Label>City</Form.Label>
-                                        <Form.Control
-                                            className="rounded-3"
-                                            type="text"
-                                            name="city"
-                                            value={formData.city}
-                                            onChange={handleChange}
-                                            placeholder="City"
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                           
                         </Form>
                     </Card.Body>
                 </Card>
@@ -311,7 +200,7 @@ export default function Settings() {
 
                 <Card className="mb-4 card rounded-4 p-4">
                     <Card.Body>
-                        <Card.Title>About Company</Card.Title>
+                        <Card.Title>About Cutomer</Card.Title>
                         <Form className="form py-4 position-relative">
                             <Form.Group controlId="description">
                                 <Form.Label>Brief Description</Form.Label>

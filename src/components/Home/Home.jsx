@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import axios from "axios";
 
 export default function Home() {
-  const CoursesImg = [C1, C2, C3, C4];
+  // const CoursesImg = [C1, C2, C3, C4,C1, C2, C3, C4];
   const API_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("token");
   const [courses, setCourses] = useState([]);
@@ -138,7 +138,7 @@ export default function Home() {
                 >
                   <div className="course m-1">
                     <img
-                      src={CoursesImg[index]}
+                      src={course.image_url}
                       alt={course.name || "Course"}
                     />
                     <div className="rate d-flex justify-content-end align-items-center mt-3 me-2">

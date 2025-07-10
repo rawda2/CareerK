@@ -61,7 +61,7 @@ export default function CustHome() {
 
         if (response.data) {
           setServices(response.data);
-          console.log(response.data)
+          console.log("postss",response.data)
         } else {
           throw new Error("Unexpected API response format");
         }

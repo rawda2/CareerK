@@ -25,8 +25,10 @@ export default function PostedJobs() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setPostedJobs(response.data || []);
-        console.log(response.data);
+        setPostedJobs(response.data.jobs
+ || []);
+        console.log(response.data.jobs
+);
       } catch (error) {
         console.error(error);
         setError("Failed to fetch Jobs. Please try again later.");
@@ -94,50 +96,38 @@ export default function PostedJobs() {
     setCurrent("jobs");
   };
 
-const getCv = async (id) => {
+const downloadDeveloperCV = async (job_application_id) => {
   try {
-    const response = await axios.get(`${API_URL}/company/${id}/cv`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "ngrok-skip-browser-warning": "true",
+    const API = import.meta.env.VITE_API_URL;
+
+    const response = await axios.get(
+      `${API}/cv/download?type=job_application&id=${job_application_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "ngrok-skip-browser-warning": "true",
+        },
+        responseType: 'blob' // Still needed to handle PDF data
       }
-    });
+    );
 
-    const filePath = response.data.uploaded_cv;
-    const fileUrl = `${CV_API}${filePath}`;
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
 
-    const fileBlob = await axios.get(fileUrl, {
-      responseType: 'blob',
-      headers: {
-        Authorization: `Bearer ${token}`, // if required
-        "ngrok-skip-browser-warning": "true",
-      },
-    });
+    // Open the PDF in a new browser tab
+    window.open(url, '_blank');
 
-    // ✅ Check if it's actually a PDF
-    const contentType = fileBlob.headers['content-type'];
-    if (!contentType.includes("pdf")||!contentType.includes("docx")) {
-      const text = await fileBlob.data.text();
-      console.error("Expected PDF, got:", text);
-      window.open(fileUrl, "_blank");
+    // Optional: Revoke object URL after a delay
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 1000 * 60); // Revoke after 1 minute
 
-      toast.error("Received non-PDF content. Please check permissions.");
-      return;
-    }
-
-    // ✅ Save the file
-    const blobUrl = window.URL.createObjectURL(fileBlob.data);
-     window.open(blobUrl, '_blank');
-    // const a = document.createElement("a");
-    // a.href = blobUrl;
-    // a.download = "cv.pdf";
-    // a.click();
-    // window.URL.revokeObjectURL(blobUrl);
-  } catch (err) {
-    console.error("Download error:", err);
-    toast.error("Failed to download CV");
+  } catch (error) {
+    console.error('Error opening developer CV:', error);
+    alert('Failed to open CV. Please try again.');
   }
 };
+
 
   return (
     <>
@@ -240,7 +230,6 @@ const getCv = async (id) => {
                                 }
                                 disabled={!applicant.id} // Disable if no ID
                               >
-                                <option value="pending">Pending</option>
                                 <option value="accepted">Accepted</option>
                                 <option value="rejected">Rejected</option>
                               </select>
@@ -250,7 +239,7 @@ const getCv = async (id) => {
                         <div className="left d-flex justify-content-center align-items-center mt-5 me-5 gap-2">
                           <button
                             className="i text-decoration-none btnn"
-                            onClick={() => getCv(applicant.id)}
+                            onClick={() =>downloadDeveloperCV(applicant.id)}
                           >
                             Resume
                           </button>

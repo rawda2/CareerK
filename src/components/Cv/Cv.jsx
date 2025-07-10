@@ -1,15 +1,26 @@
-import React from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import  { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Form, Button, Spinner, Alert, Row, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import axios from "axios";
 import './Cv.css';
-import { useState } from "react";
-import CVViewer from "./CVViewer";
 
 const Cv = () => {
-  const [submittedData, setSubmittedData] = useState(null);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const sessionId = params.get("sessionId");
+    const formData = location.state?.formData;
 
-  const initialValues = {
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+   const navigate=useNavigate()
+  const API = import.meta.env.VITE_API_URL;
+  const token=localStorage.getItem("token")
+
+
+  const initialValues = formData||
+  {
     personal_info: {
       name: "",
       email: "",
@@ -58,107 +69,70 @@ const Cv = () => {
         description: ""
       }
     ],
-    photo: null
+ 
   };
+  
 
-  // const handleSubmit = async (values, { setSubmitting }) => {
-  //   try {
-  //     const formData = new FormData();
-      
-  //     // Append all form values to FormData
-  //     formData.append('personal_info', JSON.stringify(values.personal_info));
-  //     formData.append('education', JSON.stringify(values.education));
-  //     formData.append('experience', JSON.stringify(values.experience));
-  //     formData.append('skillsets', JSON.stringify(values.skillsets));
-  //     formData.append('projects', JSON.stringify(values.projects));
-  //     formData.append('certifications', JSON.stringify(values.certifications));
-  //     formData.append('additional', JSON.stringify(values.additional));
-      
-  //     if (values.photo) {
-  //       formData.append('photo', values.photo);
-  //     }
-
-  //     const response = await axios.post('YOUR_API_ENDPOINT', formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data'
-  //       }
-  //     });
-
-  //     console.log('Submission successful', response.data);
-  //     setSubmittedData(values)
-  //   } catch (error) {
-  //     console.error('Submission error', error);
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
-
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setLoading(true);
+    setError(null);
     try {
-      // Convert the Formik values to a storable format
-      const cvData = {
-        ...values,
-        // Handle the file object specially
-        photo: values.photo
-      };
-      
-      // Save to localStorage
-      localStorage.setItem('cvData', JSON.stringify(cvData));
-      
-      // Set the submitted data to display the CV
-      setSubmittedData(cvData);
-    } catch (error) {
-      console.error('Error saving CV:', error);
+      const {...cvData } = values;
+
+      // 1. PUT form data to update session
+      await axios.put(
+        `${API}/cv-generation/${sessionId}/data`,
+        cvData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true",
+          }
+        }
+      );
+      console.log("Data Posted Successfuly")
+navigate(`cvviewer?sessionId=${sessionId}`);    
+ 
+
+    } catch (err) {
+      console.error("CV generation error:", err);
+      setError("Failed to generate your CV. Please try again.");
     } finally {
       setSubmitting(false);
+      setLoading(false);
     }
   };
-  return (
-    <div className="main bg-light mt-0 pt-2 pb-5">
-        {submittedData ? (
-      <div className="container mt-4">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Your Professional CV</h2>
-          <Button 
-            variant="outline-primary" 
-            onClick={() => setSubmittedData(null)}
-          >
-            Edit CV
-          </Button>
-        </div>
-        <CVViewer cvData={submittedData} />
+
+  if (!sessionId) {
+    return (
+      <div className="main d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+        <Alert variant="danger">
+          <strong>Error:</strong> Missing session ID. Please start from the homepage.
+        </Alert>
       </div>
-    ) : (
- <div className="container mt-4 p-5">
-        <h2 className="mb-4">Create Your CV</h2>
-        
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            setFieldValue,
-            isSubmitting
-          }) => (
-            <Form onSubmit={handleSubmit} className="position-relative">
-              
+    );
+  }
+
+  return (
+    <div className="main bg-light p-4">
+      <div className="container pt-2">
+        <h4 className="mb-5 text-center secondary font-extrabold  ">From <span className=" i">‘Blah’</span> to <span className=" i">‘Boom!’</span> – <span className="i">AI-Powered</span> CV Magic 🎩✨</h4>
+        {error && <Alert variant="danger">{error}</Alert>}
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+          {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, isSubmitting }) => (
+            <Form onSubmit={handleSubmit}>
               {/* Personal Information Section */}
-              <h4 className="mb-4">Personal Information</h4>
+              <h5 className="mt-4 mb-3">Personal Information</h5>
               <Row className="mb-3">
                 <Col md={6}>
                   <Form.Group controlId="personal_info.name">
-                    <Form.Label className="label">Name</Form.Label>
+                    <Form.Label className="label">Full Name</Form.Label>
                     <Form.Control
                       className="input"
                       type="text"
                       name="personal_info.name"
-                      placeholder="Enter your name"
+                      placeholder="Enter your full name"
                       value={values.personal_info.name}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -243,18 +217,7 @@ const Cv = () => {
                 </Col>
               </Row>
 
-              <Form.Group controlId="photo" className="mb-3">
-                <Form.Label className="label">Upload your photo</Form.Label>
-                <Form.Control
-                  className="input"
-                  type="file"
-                  name="photo"
-                  onChange={(event) => {
-                    setFieldValue("photo", event.currentTarget.files[0]);
-                  }}
-                />
-              </Form.Group>
-
+             
               {/* Education Section */}
               <h5 className="mt-5 mb-3">Education</h5>
               {values.education.map((edu, index) => (
@@ -346,9 +309,39 @@ const Cv = () => {
                         />
                       </Form.Group>
                     </Col>
+                    <Col md={3}>
+                      <Button
+                        variant="danger"
+                        className="mt-4"
+                        onClick={() => {
+                          const newEducation = [...values.education];
+                          newEducation.splice(index, 1);
+                          setFieldValue("education", newEducation);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </Col>
                   </Row>
                 </div>
               ))}
+              <Button
+               
+                className="mb-3 btnn "
+                onClick={() => {
+                  const newEducation = [...values.education, {
+                    institution: "",
+                    degree: "",
+                    field: "",
+                    start_date: "",
+                    end_date: "",
+                    gpa: ""
+                  }];
+                  setFieldValue("education", newEducation);
+                }}
+              >
+                + Add Education
+              </Button>
 
               {/* Experience Section */}
               <h5 className="mt-5 mb-3">Experience</h5>
@@ -401,30 +394,55 @@ const Cv = () => {
                         />
                       </Form.Group>
                     </Col>
+                    <Col md={6}>
+                      <Button
+                        variant="danger"
+                        className="mt-4"
+                        onClick={() => {
+                          const newExperience = [...values.experience];
+                          newExperience.splice(index, 1);
+                          setFieldValue("experience", newExperience);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </Col>
                   </Row>
 
                   <Form.Group controlId={`experience.${index}.achievements`} className="mb-2">
                     <Form.Label className="label">Achievements</Form.Label>
                     {exp.achievements.map((ach, achIndex) => (
-                      <Form.Control
-                        key={achIndex}
-                        className="input mb-2"
-                        as="textarea"
-                        name={`experience.${index}.achievements.${achIndex}`}
-                        placeholder="Enter achievement"
-                        value={ach}
-                        onChange={(e) => {
-                          const newAchievements = [...exp.achievements];
-                          newAchievements[achIndex] = e.target.value;
-                          setFieldValue(`experience.${index}.achievements`, newAchievements);
-                        }}
-                        rows={2}
-                      />
+                      <div key={achIndex} className="d-flex mb-2">
+                        <Form.Control
+                          className="input"
+                          as="textarea"
+                          name={`experience.${index}.achievements.${achIndex}`}
+                          placeholder="Enter achievement"
+                          value={ach}
+                          onChange={(e) => {
+                            const newAchievements = [...exp.achievements];
+                            newAchievements[achIndex] = e.target.value;
+                            setFieldValue(`experience.${index}.achievements`, newAchievements);
+                          }}
+                          rows={2}
+                        />
+                        <Button
+                          variant="outline-danger"
+                          className="ms-2"
+                          onClick={() => {
+                            const newAchievements = [...exp.achievements];
+                            newAchievements.splice(achIndex, 1);
+                            setFieldValue(`experience.${index}.achievements`, newAchievements);
+                          }}
+                        >
+                          ×
+                        </Button>
+                      </div>
                     ))}
                     <Button
-                      variant="outline-primary"
+                      
                       size="sm"
-                      className="mt-2"
+                      className="mt-2  btnn"
                       onClick={() => {
                         const newAchievements = [...exp.achievements, ""];
                         setFieldValue(`experience.${index}.achievements`, newAchievements);
@@ -435,6 +453,20 @@ const Cv = () => {
                   </Form.Group>
                 </div>
               ))}
+              <Button
+                className="mb-3  btnn"
+                onClick={() => {
+                  const newExperience = [...values.experience, {
+                    position: "",
+                    company: "",
+                    dates: "",
+                    achievements: [""]
+                  }];
+                  setFieldValue("experience", newExperience);
+                }}
+              >
+                + Add Experience
+              </Button>
 
               {/* Skills Section */}
               <div className="group">
@@ -464,7 +496,7 @@ const Cv = () => {
                 </div>
               </div>
 
-             {/* Projects Section */}
+              {/* Projects Section */}
               <h5 className="mt-5 mb-3">Projects</h5>
               {values.projects.map((project, index) => (
                 <div key={index} className="border p-3 mb-3 rounded bg-light">
@@ -502,24 +534,35 @@ const Cv = () => {
                   <Form.Group controlId={`projects.${index}.technologies`} className="mb-2">
                     <Form.Label className="label">Technologies Used</Form.Label>
                     {project.technologies.map((tech, techIndex) => (
-                      <Form.Control
-                        key={techIndex}
-                        className="input mb-2"
-                        type="text"
-                        name={`projects.${index}.technologies.${techIndex}`}
-                        placeholder="Enter technology"
-                        value={tech}
-                        onChange={(e) => {
-                          const newTech = [...project.technologies];
-                          newTech[techIndex] = e.target.value;
-                          setFieldValue(`projects.${index}.technologies`, newTech);
-                        }}
-                      />
+                      <div key={techIndex} className="d-flex mb-2">
+                        <Form.Control
+                          className="input"
+                          type="text"
+                          name={`projects.${index}.technologies.${techIndex}`}
+                          placeholder="Enter technology"
+                          value={tech}
+                          onChange={(e) => {
+                            const newTech = [...project.technologies];
+                            newTech[techIndex] = e.target.value;
+                            setFieldValue(`projects.${index}.technologies`, newTech);
+                          }}
+                        />
+                        <Button
+                          variant="outline-danger"
+                          className="ms-2"
+                          onClick={() => {
+                            const newTech = [...project.technologies];
+                            newTech.splice(techIndex, 1);
+                            setFieldValue(`projects.${index}.technologies`, newTech);
+                          }}
+                        >
+                          ×
+                        </Button>
+                      </div>
                     ))}
                     <Button
-                      variant="outline-primary"
-                      size="sm"
-                      className="mt-2"
+                      size="sm" 
+                      className="mt-2  btnn"
                       onClick={() => {
                         const newTech = [...project.technologies, ""];
                         setFieldValue(`projects.${index}.technologies`, newTech);
@@ -532,25 +575,36 @@ const Cv = () => {
                   <Form.Group controlId={`projects.${index}.results`} className="mb-2">
                     <Form.Label className="label">Results/Achievements</Form.Label>
                     {project.results.map((result, resultIndex) => (
-                      <Form.Control
-                        key={resultIndex}
-                        className="input mb-2"
-                        as="textarea"
-                        name={`projects.${index}.results.${resultIndex}`}
-                        placeholder="Enter result/achievement"
-                        value={result}
-                        onChange={(e) => {
-                          const newResults = [...project.results];
-                          newResults[resultIndex] = e.target.value;
-                          setFieldValue(`projects.${index}.results`, newResults);
-                        }}
-                        rows={2}
-                      />
+                      <div key={resultIndex} className="d-flex mb-2">
+                        <Form.Control
+                          className="input"
+                          as="textarea"
+                          name={`projects.${index}.results.${resultIndex}`}
+                          placeholder="Enter result/achievement"
+                          value={result}
+                          onChange={(e) => {
+                            const newResults = [...project.results];
+                            newResults[resultIndex] = e.target.value;
+                            setFieldValue(`projects.${index}.results`, newResults);
+                          }}
+                          rows={2}
+                        />
+                        <Button
+                          variant="outline-danger"
+                          className="ms-2"
+                          onClick={() => {
+                            const newResults = [...project.results];
+                            newResults.splice(resultIndex, 1);
+                            setFieldValue(`projects.${index}.results`, newResults);
+                          }}
+                        >
+                          ×
+                        </Button>
+                      </div>
                     ))}
                     <Button
-                      variant="outline-primary"
                       size="sm"
-                      className="mt-2"
+                      className="mt-2  btnn"
                       onClick={() => {
                         const newResults = [...project.results, ""];
                         setFieldValue(`projects.${index}.results`, newResults);
@@ -559,11 +613,21 @@ const Cv = () => {
                       + Add Result
                     </Button>
                   </Form.Group>
+                  <Button
+                    variant="danger"
+                    onClick={() => {
+                      const newProjects = [...values.projects];
+                      newProjects.splice(index, 1);
+                      setFieldValue("projects", newProjects);
+                    }}
+                  >
+                    Remove Project
+                  </Button>
                 </div>
               ))}
               <Button
-                variant="outline-secondary"
-                className="mb-3"
+               
+                className="mb-3  btnn"
                 onClick={() => {
                   const newProjects = [...values.projects, {
                     title: "",
@@ -626,12 +690,25 @@ const Cv = () => {
                         />
                       </Form.Group>
                     </Col>
+                    <Col md={6}>
+                      <Button
+                        variant="danger"
+                        className="mt-4"
+                        onClick={() => {
+                          const newCerts = [...values.certifications];
+                          newCerts.splice(index, 1);
+                          setFieldValue("certifications", newCerts);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </Col>
                   </Row>
                 </div>
               ))}
               <Button
-                variant="outline-secondary"
-                className="mb-3"
+               
+                className="mb-3  btnn"
                 onClick={() => {
                   const newCerts = [...values.certifications, {
                     name: "",
@@ -661,22 +738,57 @@ const Cv = () => {
                       rows={3}
                     />
                   </Form.Group>
+                  <Button
+                    variant="danger"
+                    className="mt-2"
+                    onClick={() => {
+                      const newAdditional = [...values.additional];
+                      newAdditional.splice(index, 1);
+                      setFieldValue("additional", newAdditional);
+                    }}
+                  >
+                    Remove
+                  </Button>
+                  
                 </div>
+                
               ))}
-
-              {/* Submit Button */}
-              <button 
-                className="p-2 rounded-2 float border-0" 
-                type="submit"
-                disabled={isSubmitting}
+                <Button
+               
+                className="mb-3  btnn"
+                onClick={() => {
+                  const newAdditional = [...values.additional, {
+                    title: "New Section",
+                    description: ""
+                  }];
+                  setFieldValue("additional", newAdditional);
+                }}
               >
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </button>
+                + Add Additional Section
+              </Button>
+
+              <div className="footer d-flex align-items-center flex-row-reverse mt-0 p-0 bg-transparent">
+
+              <Button
+                type="submit"
+                disabled={isSubmitting || loading}
+                className="mb-3 Btn mt-0"
+              >
+                {loading ? (
+                  <>
+                    <Spinner animation="border" size="sm" className="me-2" />
+                    Generating CV...
+                  </>
+                ) : (
+                  "Generate & Download CV"
+                )}
+              </Button>
+              </div>
+            
             </Form>
           )}
         </Formik>
-      </div>    )}
-     
+      </div>
     </div>
   );
 };

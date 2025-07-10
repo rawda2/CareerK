@@ -4,11 +4,19 @@
 }
 .roadmap .h{background-color: #EDF1FF;
     border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;}
+    border-bottom-left-radius: 20px;
+
+}
 .roadmap .h h4 {
     background-color: #EDF1FF;
     font-weight: 600;
     height: 100%;
     font-size: 20px;
     color: var(--primaryColor);
+}
+.roadmap .h img{
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
 }

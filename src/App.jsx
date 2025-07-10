@@ -25,11 +25,10 @@ import Chat from './components/Chat/Chat';
 import Certificate from './components/Certificate/Certificate';
 import Done2 from './components/Certificate/Done2';
 import ProfilePage from './components/ProfilePage/ProfilePage';
-import Profile from './components/Profile/Profile';
 import Cv from './components/Cv/Cv';
 import Jobs from './components/Jops/Jobs';
 import Application from './components/Application/Application';
-import Data from './components/Jobs/Data/Data';
+import Data from './components/Jops/Data/Data';
  // Company Components
 // import Chome from './components/Copmany/Chome/Chome';
 import CsignUp from './components/CsignUp/CsignUp';
@@ -50,7 +49,11 @@ import Details from './components/Customer/Details/Details';
 import CourseList from './components/Courses/CourseList/CourseList';
 import NotFound from './components/NotFound/NotFound';
 import ChatPage from './components/PrivateChat/ChatPage';
-
+import CVViewer from './components/Cv/CVViewer';
+import RoadMapDetails from './components/RoadMaps/RoadMapDetails';
+import CusProfile from './components/Customer/CusProfile/CusProfile'
+import EditProfile from './components/Customer/CusProfile/EditProfile';
+import Lessons from './components/CourseDetails/Lessons';
 //
 
 
@@ -86,23 +89,26 @@ const router = createBrowserRouter([
           { path: 'home', element: <Home /> },
           { path: 'courses', element: <Courses /> },
           { path: 'course/:id', element: <CourseDetails /> },
+          { path: 'lessons/:id', element: <Lessons /> },
           { path: 'checkout/:id', element: <CheckOut /> },
           { path: 'done', element: <Done /> },
           { path: 'roadmaps', element: <RoadMaps /> },
+          { path:"roadmaps/:id",element:<RoadMapDetails/>},
           { path: 'comm', element: <Comm /> },
           { path: 'chat/:id', element: <Chat /> },
           { path: 'certificate', element: <Certificate /> },
           { path: 'done2', element: <Done2 /> },
-          { path: 'profile', element: <Profile /> },
+          { path: 'profile', element: <ProfilePage /> },
           { path: 'editProfile', element: <ProfilePage /> },
           { path: 'cv', element: <Cv /> },
-          { path: 'jops', element: <Jops /> },
+          { path: 'cv/cvviewer', element: <CVViewer/> },
+          { path: 'jops', element: <Jobs /> },
           { path: 'fill/:id', element: <Application /> },
           { path: 'apply-service/:id', element: <Application /> },
           { path: 'data', element: <Data /> },
           { path: 'bot', element: <Bot /> },
           { path: 'notifi', element: <Notifi /> },
-          { path: 'courseList', element: <CourseList /> },
+          { path: 'courseList/:id', element: <CourseList /> },
          {path:'privateChat',element:<ChatPage/>}
 
 
@@ -147,9 +153,11 @@ const router = createBrowserRouter([
           { path: 'editTask/:id', element: <Task /> },
           { path: 'details/:id', element: <Details/> },
           { path: 'CUnotifi', element: <Notifi /> },
-         {path:'Chat',element:<ChatPage/>}
+         {path:'Chat',element:<ChatPage/>},
             
-          // { path: 'applicant', element: <Applicant/> },
+         { path: 'CusProfile', element: <CusProfile/> },
+         { path: 'CustEdit', element: <EditProfile/> },
+
 
 
  

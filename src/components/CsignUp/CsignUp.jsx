@@ -178,7 +178,7 @@ export default function CsignUp() {
                     <ErrorMessage name="confirm_password" component="div" className="invalid-feedback" />
                   </div>
 
-                  <div className="input w-100 d-flex justify-content-center flex-column align-items-center mt-3">
+                  <div className="input bg-transparent w-100 d-flex justify-content-center flex-column align-items-center mt-3">
                     <button
                       type="button"
                       className="btn"

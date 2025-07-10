@@ -8,7 +8,6 @@
 .search i,.body h5,.light{
     color: #8E8B8B ;
 }
-
 .light{
     font-size: 1.1rem;
 }
@@ -72,8 +71,8 @@ font-weight: 500;
     background-color: var(--primaryColor);
     border-radius: 10px;
 }
-.d-flex .active{
-     background-color: var(--secondaryColor);
+.current .active{
+    background-color: var(--secondaryColor) !important ;
     color: #fff;
     border: none;
 }

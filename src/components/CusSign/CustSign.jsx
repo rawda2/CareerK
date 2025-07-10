@@ -144,13 +144,13 @@ export default function CustSign() {
           <>
             <div className="Signform py-5 w-50">
               <form className="px-5 pt-1 pb-4 rounded-3 d-flex flex-column justify-content-center">
-                <h3 className="mb-4 h3">Sign up</h3>
+                <h3 className="mb-4 h3">Sign up customer account</h3>
 
                 {apiError && <div className="alert alert-danger w-100">{apiError}</div>}
 
                 <div className="inputs w-100 d-flex flex-column gap-2">
                   <div className="position-relative">
-                    <label htmlFor="name">Company Name*</label>
+                    <label htmlFor="name">Name*</label>
                     <input
                       type="text"
                       id="name"
@@ -229,7 +229,7 @@ export default function CustSign() {
                     )}
                   </div>
 
-                  <div className="input w-100 d-flex justify-content-center align-items-center mt-3">
+                  <div className="input w-100 bg-transparent d-flex justify-content-center align-items-center mt-3">
                     <button
                       type="button"
                       className="btn"

@@ -495,7 +495,7 @@ export default function SignUp() {
                   </div>
 
                   {/* Next Button */}
-                  <div className="input w-100 d-flex justify-content-center align-items-center mt-3">
+                  <div className="input w-100 bg-transparent d-flex justify-content-center align-items-center mt-3">
                     <button
                       type="button"
                       className="btn"

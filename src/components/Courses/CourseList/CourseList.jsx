@@ -1,186 +1,127 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Card, Button } from "react-bootstrap";
-import image1 from "./../../../assets/1.png";
+import { Card } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 import "./CourseList.css";
-import image2 from "./../../../assets/2.png";
-import image3 from "./../../../assets/3.png";
-import image4 from "./../../../assets/5.png";
-import image5 from "./../../../assets/6.png";
-import image6 from "./../../../assets/7.png";
-import avat from "./../../../assets/avat.jpg";
-const courses = [
-  {
-    id: 1,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4.5,
-    image: image1,
-    instructorAvatar: avat,
-  },
-  {
-    id: 2,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4.5,
-    image: image2,
-    instructorAvatar: avat,
-  },
-  {
-    id: 3,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4.5,
-    image: image3,
-    instructorAvatar: avat,
-  },
-  {
-    id: 4,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 1,
-    image: image4,
-    instructorAvatar: avat,
-  },
-  {
-    id: 5,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4.5,
-    image: image2,
-    instructorAvatar: avat,
-  },
-  {
-    id: 6,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 3,
-    image: image1,
-    instructorAvatar: avat,
-  },
-  {
-    id: 7,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4,
-    image: image5,
-    instructorAvatar: avat,
-  },
-  {
-    id: 8,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4.5,
-    image: image6,
-    instructorAvatar: avat,
-  },
-  {
-    id: 9,
-    title: "BackEnd Code Behind",
-    description:
-      "Unlock the back-end magic — Node.js, databases, and server logic in one place.",
-    instructor: "Mahmoud Ali",
-    price: "$678",
-    rating: 4.5,
-    image: image2,
-    instructorAvatar: avat,
-  },
-];
 
 export default function CourseList() {
-  return (
-    <section className="main px-5">
-      <div className="search py-1 px-2 rounded-2 mt-1 d-flex ms-5  align-items-center">
-        <i className="fa-solid fa-magnifying-glass fa-xl i"></i>
-        <input
-          type="search"
-          className="fa-search  border-0 py-2 px-3"
-          placeholder="Job title, Keyword..."
-        />
-      </div>
-      <Container className=" px-3 ms-auto  ">
-        <Row className=" mt-5">
-          {courses.map((course) => (
-            <Col key={course.id} md={4} className="mb-4 ">
-              <Card style={{ width: "100%" }}>
-                <Card.Img
-                  variant="top"
-                  src={course.image}
-                  alt={course.title}
-                  style={{ height: "250px" }}
-                />
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [courses, setCourses] = useState([]);
+  const token = localStorage.getItem("token");
+  const API = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const getCourses = async () => {
+      try {
+        const response = await axios.get(
+          `${API}/tracks-page/tracks/${id}/courses`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setCourses(response.data.courses);
+        console.log(response.data.courses)
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      getCourses();
+    }
+  }, [id, API, token]);
+
+  if (loading) {
+    return (
+      <Container className="px-3">
+        <Row className="mt-3 g-3">
+          {[...Array(6)].map((_, index) => (
+            <Col key={index} xs={12} sm={6} md={4} lg={3}>
+              <Card className="h-100">
+                <div className="ratio ratio-16x9 bg-light"></div>
                 <Card.Body>
-                  <p className="mb-2 ms-0 px-0 d-flex">
-                    {Array.from({ length: 5 }, (_, index) => {
-                      const rating = course.rating;
-                      if (index + 1 <= Math.floor(rating)) {
-                        return (
-                          <i
-                            key={index}
-                            className="fa-solid bg-transparent fa-star text-warning mx-0 px-0 pe-1"
-                          ></i>
-                        ); // full star
-                      } else if (index < rating) {
-                        return (
-                          <i
-                            key={index}
-                            className="fa-solid bg-transparent fa-star-half-stroke text-warning mx-0 px-0 pe-1"
-                          ></i>
-                        ); // half star
-                      } else {
-                        return (
-                          <i
-                            key={index}
-                            className="fa-regular bg-transparent fa-star text-warning mx-0 px-0 pe-1"
-                          ></i>
-                        ); // empty star
-                      }
-                    })}
-                    <p className="ms-1 text-muted mt-3">({course.rating})</p>
-                  </p>
-
-                  <Card.Title>{course.title}</Card.Title>
-                  <Card.Text>{course.description}</Card.Text>
-                  <div className="d-flex align-items-center justify-content-between mb-2">
-                    <div className="img d-flex">
-                      <img
-                        src={course.instructorAvatar}
-                        alt={course.instructor}
-                        className="rounded-circle me-2"
-                        style={{ width: "45px", height: "40px" }}
-                      />
-                      <small className=" mt-2">{course.instructor}</small>
-                    </div>
-
-                    <span className="fw-bold i">{course.price}</span>
+                  <div className="placeholder-glow">
+                    <span className="placeholder col-8 mb-2"></span>
+                    <span className="placeholder col-6"></span>
                   </div>
-                  <div className="d-flex  align-items-center gap-3 mt-3">
-                    <button className="btnn">View Course</button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    );
+  }
+
+  return (
+    <section className="main px-5 px-md-4 mt-5">
+      {/* <div className="search-bar mb-4">
+        <div className="input-group">
+          <span className="input-group-text bg-white border-end-0">
+            <i className="fas fa-search text-muted"></i>
+          </span>
+          <input
+            type="search"
+            className="form-control border-start-0 ps-0"
+            placeholder="Search courses..."
+          />
+        </div>
+      </div> */}
+
+      <Container fluid className=" px-5">
+        <Row className="g-3">
+          {courses.map((course) => (
+            <Col key={course.id} xs={12} sm={6} md={4} lg={3}>
+              <Card className="h-100 shadow-sm hover-shadow transition-all">
+                <div className="ratio ratio-16x9 ">
+                  <Card.Img
+                    variant="top"
+                    src={course.image_url}
+                    alt={course.name}
+                    className=" "
+                  />
+                </div>
+                <Card.Body className="d-flex flex-column">
+                  <div className="d-flex align-items-center mb-2">
+                    <div className="text-warning me-1">
+                      <ReactStars
+                        count={5}
+                        value={course.average_rating}
+                        size={20}
+                        edit={false}
+                        isHalf={true}
+                        activeColor="#ffd700"
+                      />
+                    </div>
+                    <small className="text-muted ms-1">
+                      ({course.average_rating})
+                    </small>
+                  </div>
+
+                  <Card.Title className="h6 mb-2 flex-grow-1">
+                    {course.name}
+                  </Card.Title>
+
+                  <div className="d-flex justify-content-between align-items-center mt-auto">
+                    <small className="text-muted">
+                      {course.total_lessons} lessons
+                    </small>
+                    <button className="btnn  p-1 px-3"><Link
+  className="text-decoration-none i"
+  to={`/course/${course.course_id}?trackId=${id}`}
+>
+  View
+</Link></button>
                   </div>
                 </Card.Body>
               </Card>

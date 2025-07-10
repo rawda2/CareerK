@@ -30,9 +30,9 @@
 
 
 .aside {
-  width: 18% !important;
+  width: 20% !important;
   background-color: #fff;
-  height: 280px;
+  height: 350px;
   margin-left: -20px;
 }
 
@@ -65,16 +65,30 @@
 
 
 }
-
-.menu-item:hover, .menu-item:focus {
-  background-color: var(--primaryColor);
+.menu-item:hover,
+.menu-item:focus,
+.menu-item:active,
+.menu-item.active {
+  background-color: #7D8AC3;
   color: #fff;
 }
 
-.menu-item:hover i, .menu-item:focus i {
-  color: #fff;
-
+.menu-item:hover i,
+.menu-item:focus i,
+.menu-item:active i,
+.menu-item.active i {
+  color: #fff !important;
 }
+
+
+.profile-menu .main{
+  background-color: #7d8ac3b4;
+  color: #fff;
+}
+
+
+
+
 
 .logout, .logout i {
   color: #E3767A;

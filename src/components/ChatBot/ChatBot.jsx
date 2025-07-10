@@ -1,76 +1,138 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Chatbot.css';
-import bot from './../../assets/bot.png'
-import file from './../../assets/file.png'
-
+import bot from './../../assets/bot.png';
+import file from './../../assets/file.png';
+import axios from 'axios';
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
-    { text: "I'm doing great! how are you today?", sender: 'bot', time: '12:17 PM' },
-    { text: "I'm doing great! how are you today?", sender: 'bot', time: '12:17 PM' },
-    { text: 'can ou', sender: 'user', time: '12:17 PM' },
-    { text: "I'm doing great! how are you today?", sender: 'bot', time: '12:17 PM' },
+    { text: "Hello! I'm Carrerk AI. How can I assist you with your career today?", sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
   ]);
-
   const [input, setInput] = useState('');
+  const [chat, setChat] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const chatBodyRef = useRef(null);
 
-  const handleSend = (customMessage) => {
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleChat = () => {
+    setChat(!chat);
+  };
+  const API_URL=import.meta.env.VITE_API_URL
+  const token=localStorage.getItem("token")
+
+  const handleSend = async (customMessage) => {
     const text = customMessage || input.trim();
-    if (text) {
-      const newMsg = { text, sender: 'user', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-      setMessages([...messages, newMsg]);
-      setInput('');
+    if (!text) return;
+
+    // Add user message
+    const userMsg = { 
+      text, 
+      sender: 'user', 
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+    };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      // Call the API
+      const response = await axios.post(
+        `${API_URL}/chatbot/ask`,
+        { prompt: text },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+            Authorization: `Bearer ${token}`,
+
+          }
+        }
+      );
+
+      // Add bot response
+      const botMsg = { 
+        text: response.data.response, 
+        sender: 'bot', 
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+      };
+      setMessages(prev => [...prev, botMsg]);
+    } catch (error) {
+      console.error('Error calling chatbot API:', error);
+      const errorMsg = { 
+        text: "Sorry, I'm having trouble connecting. Please try again later.", 
+        sender: 'bot', 
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const [chat, setChat] = useState(false);
-  const handleChat = () => {
-    setChat(!chat)
-  }
-
   return (
     <>
-      <img src={bot} alt="" className='bot' onClick={handleChat} />
-      {chat && (<>
-
+      <img src={bot} alt="Chatbot" className='bot' onClick={handleChat} />
+      
+      {chat && (
         <div className="chatbot-container">
           <div className="chat-header">
             Carrerk AI
-            {/* <span onClick={handleChat}>—</span> */}
-            <i className=' fa-solid fa-xmark mt-1 ' onClick={handleChat}></i>
+            <i className='fa-solid fa-xmark mt-1' onClick={handleChat}></i>
           </div>
 
-          <div className="chat-body">
+          <div className="chat-body" ref={chatBodyRef}>
             {messages.map((msg, idx) => (
               <div key={idx} className={`message ${msg.sender === 'bot' ? 'bot-message' : 'user-message'}`}>
                 {msg.text}
                 <div className="timestamp">{msg.time}</div>
               </div>
             ))}
-            <div className="typing-indicator"></div>
+            {isLoading && (
+              <div className="message bot-message">
+                <div className="typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="suggestions">
-            <button onClick={() => handleSend("Hi, Bot")}>Hi, Bot</button>
-            <button onClick={() => handleSend("Can you help me?")}>Can you help me?</button>
+            <button onClick={() => handleSend("What career options suit my skills?")}>
+              Career options
+            </button>
+            <button onClick={() => handleSend("How can I improve my resume?")}>
+              Resume help
+            </button>
           </div>
 
-
           <div className="chat-input">
-            <span className="icon"><img src={file} alt="" /></span>
+            
             <input
               type="text"
-              placeholder="Aa"
+              placeholder="Type your message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             />
-            <span className="icon"><i className="fa-regular fa-paper-plane i mx-2"></i></span>
+            <span 
+              className="icon" 
+              onClick={() => handleSend()}
+              style={{ cursor: 'pointer' }}
+            >
+              <i className="fa-regular fa-paper-plane i mx-2"></i>
+            </span>
           </div>
         </div>
-      </>)}
+      )}
     </>
-
   );
 };
 

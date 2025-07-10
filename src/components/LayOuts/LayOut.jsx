@@ -6,6 +6,7 @@ import Footer from '../Footer/Footer';
 // import ChatBot from 'react-chatbotify'
 import ChatBot from './../ChatBot/ChatBot'
 import './Layout.css'
+import CVButton from '../Cv/CVButton';
 
 export default function LayOut() {
   const location = useLocation();
@@ -25,6 +26,8 @@ export default function LayOut() {
       <Outlet />
      
       {isAuthenticated && !noNavBarRoutes.includes(location.pathname) && <ChatBot />}
+      {isAuthenticated && !noNavBarRoutes.includes(location.pathname) && <CVButton />}
+
 
 
       {isAuthenticated && !noNavBarRoutes.includes(location.pathname) && <Footer />}

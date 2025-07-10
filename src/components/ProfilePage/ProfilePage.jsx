@@ -6,101 +6,27 @@ import {
   Container,
   Row,
   Col,
-  Badge,
   ListGroup,
   ProgressBar,
 } from "react-bootstrap";
 import "./ProfilePage.css";
 import { Link } from "react-router-dom";
-import image1 from "./../../assets/1.png";
-import image2 from "./../../assets/2.png";
-import image3 from "./../../assets/3.png";
-import image4 from "./../../assets/5.png";
-import image5 from "./../../assets/6.png";
-import image6 from "./../../assets/7.png";
+
 import work from "./../../assets/work.png";
 import card from "./../../assets/MasterCard.png";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import Profile from "../Profile/Profile";
 
 const ProfilePage = () => {
-  
-  const courses = [
-    {
-      id: 1,
-      title: "Introduction to React",
-      description: "Learn the basics of React and build your first app.",
-      instructor: "John Doe",
-      price: 99,
-
-      progress: 30,
-      duration: "4 weeks",
-      image: image1, // Replace with real image URL
-      category: "Web Development",
-    },
-    {
-      id: 2,
-      title: "Advanced JavaScript",
-      description: "Master advanced JavaScript concepts and techniques.",
-      instructor: "Jane Smith",
-      price: 149,
-      progress: 70,
-      duration: "6 weeks",
-      image: image2, // Replace with real image URL
-      category: "Web Development",
-    },
-    {
-      id: 3,
-      title: "Node.js for Beginners",
-      description:
-        "Get started with Node.js and build scalable backend applications.",
-      instructor: "Alice Johnson",
-      price: 129,
-      progress: 90,
-      duration: "5 weeks",
-      image: image3, // Replace with real image URL
-      category: "Backend Development",
-    },
-    {
-      id: 4,
-      title: "Python for Data Science",
-      description: "Learn Python and its applications in data science.",
-      instructor: "Bob Brown",
-      price: 199,
-      progress: 100,
-      duration: "8 weeks",
-      image: image4, // Replace with real image URL
-      category: "Data Science",
-    },
-    {
-      id: 5,
-      title: "Advanced JavaScript",
-      description: "Master advanced JavaScript concepts and techniques.",
-      instructor: "Jane Smith",
-      price: 149,
-      progress: 20,
-      duration: "6 weeks",
-      image: image5, // Replace with real image URL
-      category: "Web Development",
-    },
-    {
-      id: 6,
-      title: "Introduction to React",
-      description: "Learn the basics of React and build your first app.",
-      instructor: "John Doe",
-      price: 99,
-
-      progress: 30,
-      duration: "4 weeks",
-      image: image6, // Replace with real image URL
-      category: "Web Development",
-    },
-  ];
+  const [courses, setCourses] = useState([]);
   const [jobs1, setJobs] = useState([]);
+  const [services, setServices] = useState([]);
+
   const [saved, setSavedJobs] = useState([]);
   const [error, setError] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
-
+  const [loading,setLoading]=useState(false)
   const token = localStorage.getItem("token");
   console.log(token);
   let [current, setCurrent] = useState("profile");
@@ -108,7 +34,6 @@ const ProfilePage = () => {
   function handleCurrent(current) {
     setCurrent(current);
   }
-
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -120,7 +45,7 @@ const ProfilePage = () => {
     const fetchJobs = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}/job-application/my-applications`,
+          `${API_URL}/developer/my-applications`,
           {
             headers: {
               "ngrok-skip-browser-warning": "true",
@@ -129,8 +54,13 @@ const ProfilePage = () => {
             },
           }
         );
-        console.log("API Response Applications:", response.data);
-        setJobs(response.data.applications);
+        console.log(
+          "API Response Applications:",
+          response.data.job_applications
+        );
+        setJobs(response.data.job_applications);
+
+        setServices(response.data.service_applications);
       } catch (error) {
         console.error(error);
         setError("Failed to fetch jobs. Please try again later.");
@@ -139,7 +69,29 @@ const ProfilePage = () => {
     };
     fetchJobs();
   }, []);
-  
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/courses-page/courses/ongoing`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("API Courses:", response.data);
+        setCourses(response.data);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to fetch Courses. Please try again later.");
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -169,7 +121,9 @@ const ProfilePage = () => {
       toast.success("Application Deleted  successfully");
 
       // Update the UI by removing the withdrawn job
-      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== applicationId));
+      setJobs((prevJobs) =>
+        prevJobs.filter((job) => job.application_id !== applicationId)
+      );
     } catch (error) {
       console.error("Error deleting application:", error);
     }
@@ -194,9 +148,9 @@ const ProfilePage = () => {
   }, []);
   const handleUnSaved = async (post_id) => {
     try {
-      const response = await axios.post(
-        `${API_URL}/bookmarks`,
-        { post_id },
+      const response = await axios.patch(
+        `${API_URL}/bookmarks/${ post_id}`,
+        { },
         {
           headers: {
             "ngrok-skip-browser-warning": "true",
@@ -218,6 +172,82 @@ const ProfilePage = () => {
       toast.error("Failed to unsave job. Please try again.");
     }
   };
+
+  const getCV = async () => {
+    const response = await axios.get(`${API_URL}/developer/my-cv`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "true",
+      },
+    });
+    console.log(response.data);
+  };
+  const initialFormData = {
+  first_name: "",
+  last_name: "",
+  phone_number: "",
+  country: "",
+  city: "",
+  address: "",
+  brief_bio: "",
+  skills: [],
+  current_track: "",
+  track_level: "",
+  previous_job: "",
+  type_of_job: "",
+  years_of_experience: "",
+  expected_salary: "",
+  uploaded_cv: null,
+  profile_picture: null,
+};
+
+const [formData, setFormData] = useState(initialFormData);
+const clearForm = () => {
+  setFormData(initialFormData);
+};
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const formDataToSend = new FormData();
+     setLoading(true)
+    Object.keys(formData).forEach((key) => {
+      if (key === "skills") {
+        formDataToSend.append(key, JSON.stringify(formData[key]));
+      } else if (formData[key] !== null) {
+        formDataToSend.append(key, formData[key]);
+      }
+    });
+
+    const response = await axios.patch(
+      `${API_URL}/developer/edit-profile`,
+      formDataToSend,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    // Axios automatically parses JSON
+    console.log("Profile updated successfully:", response.data);
+    toast.success("Profile Updated Successfuly")
+    clearForm()
+     setCurrent("profile")
+     setLoading(false)
+  } catch (error) {
+    if (error.response) {
+      console.error("Server error:", error.response.data);
+    } else {
+      console.error("Unexpected error:", error.message);
+    }
+  }
+   finally {
+    setLoading(false); }
+    
+};
+
   return (
     <>
       <ToastContainer
@@ -232,177 +262,271 @@ const ProfilePage = () => {
         pauseOnHover
       />
       <section className=" d-flex p-4 justify-content-center gap-0 ">
-        {current == "profile" ? (
-          <Container className="profile-page w-75 mt-1">
-            <Card className="mb-4 card rounded-4 p-4">
-              <Card.Body>
-                <Card.Title>Personal Information</Card.Title>
-                <Form className="form py-4 position-relative">
-                  <Row className="mb-3">
-                    <Col>
-                      <Form.Group
-                        controlId="firstName"
-                        className=" d-flex gap-2 "
-                      >
-                        <Form.Group className=" w-50">
-                          <Form.Label>First Name</Form.Label>
-                          <Form.Control
-                            className=" rounded-3"
-                            type="text"
-                            placeholder="First Name"
-                          />
-                        </Form.Group>
-                        <Form.Group className=" w-50">
-                          <Form.Label>Family Name</Form.Label>
-                          <Form.Control
-                            className=" rounded-3"
-                            type="text"
-                            placeholder="Family Name"
-                          />
-                        </Form.Group>
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group controlId="email">
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control
-                          className=" rounded-3"
-                          type="email"
-                          placeholder="Email@Gmail.Com"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row className="mb-3">
-                    <Col>
-                      <Form.Group controlId="phoneNumber">
-                        <Form.Label>Phone Number</Form.Label>
-                        <Form.Control
-                          className=" rounded-3"
-                          type="text"
-                          placeholder="Address"
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group controlId="gender">
-                        <Form.Label>Gender</Form.Label>
-                        <Form.Control className=" rounded-3" as="select">
-                          <option>Male</option>
-                          <option>Female</option>
-                        </Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Form.Group controlId="location" className=" w-50">
-                        <Form.Label>Location</Form.Label>
-                        <Form.Control className=" rounded-3" as="select">
-                          <option>Location 1</option>
-                          <option>Location 2</option>
-                        </Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Button variant="primary" className="Btn">
-                    Save
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
+        {current == "profile" ? <Profile /> : ""}
+       {current == "Editprofile" ? (
+  <Container className="profile-page w-75 mt-1">
+    <Card className="mb-4 card rounded-4 p-4">
+      <Card.Body>
+        <Card.Title>Personal Information</Card.Title>
+        <Form className="form py-4 position-relative" onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="firstName" className="d-flex gap-2">
+                <Form.Group className="w-50">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    className="rounded-3"
+                    type="text"
+                    placeholder="First Name"
+                    value={formData.first_name}
+                    onChange={(e) => setFormData({...formData, first_name: e.target.value})}
+                  />
+                </Form.Group>
+                <Form.Group className="w-50">
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    className="rounded-3"
+                    type="text"
+                    placeholder="Last Name"
+                    value={formData.last_name}
+                    onChange={(e) => setFormData({...formData, last_name: e.target.value})}
+                  />
+                </Form.Group>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="phoneNumber">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="text"
+                  placeholder="Phone Number"
+                  value={formData.phone_number}
+                  onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="country">
+                <Form.Label>Country</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="text"
+                  placeholder="Country"
+                  value={formData.country}
+                  onChange={(e) => setFormData({...formData, country: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="city">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="text"
+                  placeholder="City"
+                  value={formData.city}
+                  onChange={(e) => setFormData({...formData, city: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="address">
+                <Form.Label>Address</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="text"
+                  placeholder="Address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({...formData, address: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Button variant="primary" className="btnn float-end  text-light" type="submit">
+            {loading?"Saving.....":"Save"}
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
 
-            <Card className="mb-4 card rounded-4 p-4">
-              <Card.Body>
-                <Card.Title>About Me</Card.Title>
-                <Form className="form py-4 position-relative">
-                  <Form.Group controlId="description">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                      className=" rounded-3 w-75"
-                      as="textarea"
-                      rows={3}
-                      placeholder="Write your description"
-                    />
-                  </Form.Group>
-                  <Button variant="primary" className=" Btn">
-                    Save
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
+    <Card className="mb-4 card rounded-4 p-4">
+      <Card.Body>
+        <Card.Title>Professional Information</Card.Title>
+        <Form className="form py-4 position-relative" onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="currentTrack">
+                <Form.Label>Current Track</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="text"
+                  placeholder="Current Track"
+                  value={formData.current_track}
+                  onChange={(e) => setFormData({...formData, current_track: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="trackLevel">
+                <Form.Label>Track Level</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  as="select"
+                  value={formData.track_level}
+                  onChange={(e) => setFormData({...formData, track_level: e.target.value})}
+                >
+                  <option value="">Select Level</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="previousJob">
+                <Form.Label>Previous Job</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="text"
+                  placeholder="Previous Job"
+                  value={formData.previous_job}
+                  onChange={(e) => setFormData({...formData, previous_job: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="jobType">
+                <Form.Label>Type of Job</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  as="select"
+                  value={formData.type_of_job}
+                  onChange={(e) => setFormData({...formData, type_of_job: e.target.value})}
+                >
+                  <option value="">Select Job Type</option>
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Internship">Internship</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="experience">
+                <Form.Label>Years of Experience</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="number"
+                  placeholder="Years of Experience"
+                  value={formData.years_of_experience}
+                  onChange={(e) => setFormData({...formData, years_of_experience: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="expectedSalary">
+                <Form.Label>Expected Salary</Form.Label>
+                <Form.Control
+                  className="rounded-3"
+                  type="number"
+                  placeholder="Expected Salary"
+                  value={formData.expected_salary}
+                  onChange={(e) => setFormData({...formData, expected_salary: e.target.value})}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Button  className="btnn float-end" type="submit">
+            Save
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
 
-            <Card className="mb-4 card rounded-4 p-4">
-              <Card.Body>
-                <Card.Title>Services</Card.Title>
-                <Form className="form py-4 position-relative">
-                  <Form.Group controlId="services">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                      className=" rounded-3 w-75"
-                      as="textarea"
-                      rows={3}
-                      placeholder="Write your Services"
-                    />
-                  </Form.Group>
-                  <Button variant="primary" className=" Btn">
-                    Save
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
+    <Card className="mb-4 card rounded-4 p-4">
+      <Card.Body>
+        <Card.Title>About Me</Card.Title>
+        <Form className="form py-4 position-relative" onSubmit={handleSubmit}>
+          <Form.Group controlId="description">
+            <Form.Label>Brief Bio</Form.Label>
+            <Form.Control
+              className="rounded-3 w-75"
+              as="textarea"
+              rows={3}
+              placeholder="Write your brief bio"
+              value={formData.brief_bio}
+              onChange={(e) => setFormData({...formData, brief_bio: e.target.value})}
+            />
+          </Form.Group>
+          <Form.Group controlId="skills" className="mt-3">
+            <Form.Label>Skills (comma separated)</Form.Label>
+            <Form.Control
+              className="rounded-3 w-75"
+              type="text"
+              placeholder="e.g., JavaScript, Python, React"
+              value={formData.skills.join(', ')}
+              onChange={(e) => setFormData({...formData, skills: e.target.value.split(',').map(skill => skill.trim())})}
+            />
+          </Form.Group>
+          <Button  className="btnn float-end mt-3" type="submit">
+            Save
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
 
-            <Card className="mb-4 card rounded-4 p-4">
-              <Card.Body>
-                <Card.Title>Change Password</Card.Title>
-                <Form className="form py-4 position-relative">
-                  <Row className="mb-3">
-                    <Col>
-                      <Form.Group controlId="currentPassword">
-                        <Form.Label>Current Password</Form.Label>
-                        <Form.Control
-                          className=" rounded-3"
-                          type="password"
-                          placeholder="**********"
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group controlId="newPassword">
-                        <Form.Label>New Password</Form.Label>
-                        <Form.Control
-                          className=" rounded-3"
-                          type="password"
-                          placeholder="**********"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Form.Group
-                        controlId="confirmNewPassword"
-                        className=" w-50"
-                      >
-                        <Form.Label>Confirm New Password</Form.Label>
-                        <Form.Control
-                          className=" rounded-3"
-                          type="password"
-                          placeholder="**********"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Button variant="primary" className="Btn">
-                    Save
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Container>
-        ) : (
-          ""
-        )}
+    <Card className="mb-4 card rounded-4 p-4">
+      <Card.Body>
+        <Card.Title>Upload CV</Card.Title>
+        <Form className="form py-4 position-relative" onSubmit={handleSubmit}>
+          <Form.Group controlId="cvUpload">
+            <Form.Label>Upload your CV (PDF)</Form.Label>
+            <Form.Control
+              className="rounded-3 w-75"
+              type="file"
+              accept=".pdf"
+              onChange={(e) => setFormData({...formData, uploaded_cv: e.target.files[0]})}
+            />
+          </Form.Group>
+          <Button  className="btnn float-end mt-3" type="submit">
+            Upload
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
+
+    <Card className="mb-4 card rounded-4 p-4">
+      <Card.Body>
+        <Card.Title>Profile Picture</Card.Title>
+        <Form className="form py-4 position-relative" onSubmit={handleSubmit}>
+          <Form.Group controlId="profilePicture">
+            <Form.Label>Upload Profile Picture</Form.Label>
+            <Form.Control
+              className="rounded-3 w-75"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFormData({...formData, profile_picture: e.target.files[0]})}
+            />
+          </Form.Group>
+          <Button  className="btnn float-end mt-3" type="submit">
+            Upload
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
+  </Container>
+) : (
+  ""
+)}
         {current == "courses" ? (
           <Container className="my-courses  w-75 mt-1">
             <Card className="mb-4 py-4 px-3">
@@ -415,27 +539,30 @@ const ProfilePage = () => {
                       className="course-item  rounded-3 px-0 mb-5 d-flex align-items-center "
                     >
                       <Row>
-                        <Col md={4}>
+                        <Col md={5}>
                           <img
-                            src={course.image}
-                            alt={course.title}
-                            className="course-image "
+                            src={course.image_url}
+                            alt={course.name}
+                            className="course-image  w-100"
                           />
                         </Col>
-                        <Col md={8}>
+                        <Col md={7}>
                           <div className="course-details p-4">
-                            <h5>{course.title}</h5>
-                            <p className="p">{course.duration}</p>
-                            <span className="span d-flex justify-content-center align-items-center m-4 p-2 rounded-5 position-absolute top-0 end-0 px-3">
-                              {course.category}
+                            <h5>{course.name}</h5>
+                            <p className="p">{course.last_accessed_at}</p>
+                            <span
+                              className={`span d-flex justify-content-center align-items-center m-4 p-2 rounded-5 position-absolute top-0 end-0 px-3 special_button`}
+                            >
+                              {course.difficulty}
                             </span>
+
                             <p>
                               <i className="fa-solid fa-play span mb-3 p-3 rounded-circle"></i>
-                              <strong>Next Class</strong> {course.description}
+                              {course.description}{" "}
                             </p>
                             <ProgressBar
-                              now={course.progress}
-                              label={`${course.progress}%`}
+                              now={course.progress_percentage || 30}
+                              label={`${course.progress_percentage || 30}%`}
                             />
                           </div>
                         </Col>
@@ -491,7 +618,10 @@ const ProfilePage = () => {
                             </p>
                           </div>
                         </Col>
-                        <Col md={3} className=" position-relative d-flex justify-content-between flex-column">
+                        <Col
+                          md={3}
+                          className=" position-relative d-flex justify-content-between flex-column"
+                        >
                           <div className="job-info text-start">
                             <h6 className="i">Post Type</h6>
 
@@ -500,7 +630,14 @@ const ProfilePage = () => {
 
                             <p> {job.salary_range}</p>
                           </div>
-                                                      <button className="Btn mb-3"><Link className=" text-decoration-none" to={`/fill/${job.id}`}>Apply This</Link> </button>
+                          <button className="Btn mb-3">
+                            <Link
+                              className=" text-decoration-none"
+                              to={`/fill/${job.id}`}
+                            >
+                              Apply This
+                            </Link>{" "}
+                          </button>
 
                           <i
                             className=" fa-bookmark i fa-solid position-absolute "
@@ -539,10 +676,11 @@ const ProfilePage = () => {
                         </Col>
                         <Col md={7}>
                           <div className="job-details mt-3">
-                            <h5>{job.company_name}</h5>
+                            <h4>{job.job_post.title}</h4>
+                            <h5>{job.job_post.company.company_name}</h5>
                             <p>{job.title}</p>
                             <button className="special_button me-2">
-                              {job.years_of_experience} Yrs Exp
+                              {job.job_post.experience_required} Yrs Exp
                             </button>
                             <span className={getStatusClass(job.status)}>
                               {job.status}
@@ -550,7 +688,7 @@ const ProfilePage = () => {
                             <p>
                               <small>
                                 Applied on :{" "}
-                                {new Date(job.created_at).toLocaleDateString()}
+                                {new Date(job.applied_at).toLocaleDateString()}
                               </small>
                             </p>
                           </div>
@@ -560,23 +698,25 @@ const ProfilePage = () => {
                             <h6 className="i">Expected Salary </h6>
 
                             <p className="salary special">
-                              <span>{job.expected_salary}$</span>{" "}
+                              <span>{job.job_post.salary_range}$</span>{" "}
                               <span className="light">/Year</span>
                             </p>
                             <div className="action d-flex flex-column gap-3">
-                              <a
-                                href={job.uploaded_cv}
+                              <button
                                 target="_blank"
-                                download
+                                onClick={() => {
+                                  getCV();
+                                }}
                                 className=" text-center Btn text-decoration-none"
-                                rel="noreferrer"
                               >
                                 View CV
-                              </a>
+                              </button>
                               <button className="rounded py-2 btn-outline-danger text-danger">
                                 <i className=" fa-solid fa-trash text-danger me-3"></i>
                                 <Link
-                                  onClick={() => handleWithdraw(job.id)}
+                                  onClick={() =>
+                                    handleWithdraw(job.application_id)
+                                  }
                                   className=" link text-danger"
                                 >
                                   Withdraw
@@ -670,31 +810,55 @@ const ProfilePage = () => {
           <Card className="profile-menu">
             <ListGroup variant="menu">
               <Link
-                className="menu-item rounded-2 mb-2"
+                className={`menu-item rounded-2 mb-2 main ${
+                  current === "profile" ? "active" : ""
+                }`}
                 onClick={() => handleCurrent("profile")}
+              >
+                <i className="fa-solid fa-user bg-transparent p-0 text-light"></i>{" "}
+                Profile
+              </Link>
+
+              <Link
+                className={`menu-item rounded-2 mb-2 ${
+                  current === "Editprofile" ? "active" : ""
+                }`}
+                onClick={() => handleCurrent("Editprofile")}
               >
                 <i className="fa-solid fa-user"></i> Edit Profile
               </Link>
+
               <Link
-                className="menu-item rounded-2 mb-2"
+                className={`menu-item rounded-2 mb-2 ${
+                  current === "courses" ? "active" : ""
+                }`}
                 onClick={() => handleCurrent("courses")}
               >
                 <i className="fa-solid fa-book-open"></i> My Courses
               </Link>
+
               <Link
-                className="menu-item rounded-2 mb-2"
+                className={`menu-item rounded-2 mb-2 ${
+                  current === "jobs" ? "active" : ""
+                }`}
                 onClick={() => handleCurrent("jobs")}
               >
                 <i className="fa-solid fa-bookmark"></i> Saved Jobs
               </Link>
+
               <Link
-                className="menu-item rounded-2 mb-2"
+                className={`menu-item rounded-2 mb-2 ${
+                  current === "applied" ? "active" : ""
+                }`}
                 onClick={() => handleCurrent("applied")}
               >
                 <i className="fa-solid fa-check-double"></i> My Applications
               </Link>
+
               <Link
-                className="menu-item rounded-2 mb-2"
+                className={`menu-item rounded-2 mb-2 ${
+                  current === "pay" ? "active" : ""
+                }`}
                 onClick={() => handleCurrent("pay")}
               >
                 <i className="fa-solid fa-credit-card"></i> Payment Options

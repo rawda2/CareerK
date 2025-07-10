@@ -128,7 +128,7 @@ Messages                </Link>
             </div>
 
             <div className="nav-item d-flex flex-column align-items-center">
-              <Link className="nav-link" to={'/Cprofile'}>
+              <Link className="nav-link" to={'/CusProfile'}>
                 <i className="fa-regular fa-user  mt-3  p-2 profile rounded-circle"></i>
               </Link>
             </div>

@@ -1,6 +1,5 @@
-// FULL EDITED JObS COMPONENT
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Jobs.css";
 import axios from "axios";
@@ -8,42 +7,45 @@ import work from "./../../assets/work.png";
 import Loader from "../Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useQuery } from 'react-query';
+
 
 export default function Jobs() {
-  const [jobs, setJobs] = useState([]);
-  const [services, setServices] = useState([]);
-  const [error, setError] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [savedJobs, setSavedJobs] = useState(new Set());
   const [current, setCurrent] = useState("jobs");
+  const [savedJobs, setSavedJobs] = useState(new Set());
 
   const API_URL = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(`${API_URL}/recommendations`, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setJobs(response.data.job_recommendations || []);
-        setServices(response.data.service_recommendations || []);
-      } catch (error) {
-        setError("Failed to fetch jobs. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchJobs();
-  }, []);
+  // Fetch jobs and services data with React Query
+  const { data, isLoading, error } = useQuery(
+    "jobsData",
+    async () => {
+      const response = await axios.get(`${API_URL}/recommendations`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+          console.log("Raw response from /recommendations:", response);
+
+      return {
+        jobs: response.data.job_recommendations || [],
+        services: response.data.service_recommendations || [],
+      };
+    },
+    {
+      staleTime: Infinity, // Data won't refetch automatically
+      cacheTime: 24 * 60 * 60 * 1000, // Cache for 24 hours
+    }
+  );
+
+  // Get saved jobs
+
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -52,54 +54,61 @@ export default function Jobs() {
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
-  useEffect(() => {
-    const getSaved = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/bookmarks`, {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const savedJobIds = response.data.map((job) => job.post_id || job.id);
-        setSavedJobs(new Set(savedJobIds));
-      } catch (error) {
-        console.error("Error getting saved jobs:", error);
+const { data: savedJobsData, refetch: refetchSavedJobs } = useQuery(
+  "savedJobs",
+  async () => {
+    const response = await axios.get(`${API_URL}/bookmarks`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.map((job) => job.post_id || job.id);
+  },
+  {
+    onSuccess: (bookmarkIds) => {
+      setSavedJobs(new Set(bookmarkIds));
+    },
+  }
+);
+useEffect(() => {
+  if (current === "jobs") {
+    refetchSavedJobs();
+  }
+}, [current]);
+
+useEffect(() => {
+  refetchSavedJobs(); // fetch saved jobs on component mount
+}, []);
+
+
+const handleSave = async (post_id) => {
+  try {
+    await axios.patch(
+      `${API_URL}/bookmarks/${post_id}`,
+      { },
+      {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${token}`,
+        },
       }
-    };
-    getSaved();
-  }, []);
+    );
+    
+    await refetchSavedJobs();
+    
+    toast.success(
+      savedJobs.has(post_id) 
+        ? "Job unsaved successfully" 
+        : "Job saved successfully"
+    );
+  } catch (error) {
+    toast.error("Failed to save job.");
+    console.error("Save error:", error);
+  }
+};
 
-  const handleSave = async (post_id) => {
-    try {
-      await axios.post(
-        `${API_URL}/bookmarks`,
-        { post_id },
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setSavedJobs((prev) => {
-        const newSet = new Set(prev);
-        if (newSet.has(post_id)) {
-          newSet.delete(post_id);
-          toast.success("Job unsaved successfully");
-        } else {
-          newSet.add(post_id);
-          toast.success("Job saved successfully");
-        }
-        return newSet;
-      });
-    } catch (error) {
-      toast.error("Failed to save job.");
-    }
-  };
-
-  const filteredJobs = jobs.filter((job) => {
+  const filteredJobs = data?.jobs.filter((job) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return [
@@ -114,7 +123,7 @@ export default function Jobs() {
       .some((field) => field.toLowerCase().includes(query));
   });
 
-  const filteredServices = services.filter((svc) => {
+  const filteredServices = data?.services.filter((svc) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return [
@@ -146,7 +155,7 @@ export default function Jobs() {
             />
           </div>
         </div>
-        <nav className="d-flex flex-row-reverse gap-3 my-4">
+        <nav className="d-flex flex-row-reverse gap-3 my-4 current">
           <button
             className={`Btn ${current === "jobs" ? "active disabled" : ""}`}
             onClick={() => setCurrent("jobs")}
@@ -200,12 +209,18 @@ export default function Jobs() {
                         <h4 className="text-dark" id="jop">
                           {item.title}
                         </h4>
+                        <h6 className="text-dark" id="jop">
+                          {item.company_name||item.customer_name}
+                        </h6>
+
+                          {current=="jobs"?
                         <p>
-                          {" "}
-                          <span>{item.company_name || item.contact_info}</span>
+
+                          <span>{item.job_availability || item.contact_info}</span>
                           <div className="dot"></div>
-                          <span>{item.location}</span>
-                        </p>
+                          <span>{item.location}</span>   </p>:""}
+                        
+                     
                         <div className="btns d-flex gap-2 flex-wrap">
                           <button className="special_button">
                             {item.job_type || item.service_type || "N/A"}
@@ -233,7 +248,10 @@ export default function Jobs() {
                                 "Experience not specified"}
                             </span>
                           ) : (
-                            ""
+                              <span>
+                              {new Date(item.deadline).toLocaleDateString()||
+                                "Experience not specified"}
+                            </span>
                           )}
                         </p>{" "}
                       </div>
@@ -261,15 +279,16 @@ export default function Jobs() {
                       </span>
                     </div>
                   </div>
-
-                  {current === "jobs" && (
-                    <i
-                      className={`fa-bookmark i ${
-                        savedJobs.has(item.id) ? "fa-solid" : "fa-regular"
-                      }`}
-                      onClick={() => handleSave(item.id)}
-                    ></i>
-                  )}
+{current === "jobs" && (
+  <i
+    className={`fa-bookmark i text-2xl ${
+      savedJobs.has(item.id) ? "fa-solid i" : "fa-regular"
+    }`}
+    onClick={() => handleSave(item.id)}
+    style={{ cursor: "pointer", fontSize: "1.2rem" }}
+    title={savedJobs.has(item.id) ? "Unsave this job" : "Save this job"}
+  ></i>
+)}
                 </div>
               ))}
             </div>
@@ -297,9 +316,16 @@ export default function Jobs() {
                     <p className="mt-2">
                       <i className="fa-regular fa-clock i"></i>
                       Deadline:{" "}
-                      {selectedItem.application_deadline ||
-                        selectedItem.deadline ||
-                        "Not specified"}
+                      {
+  selectedItem.deadline_task
+
+    ? new Date(selectedItem.deadline_task
+).toLocaleDateString()
+    : selectedItem.deadline
+    ? new Date(selectedItem.deadline).toLocaleDateString()
+    : "Not specified"
+}
+
                     </p>
                     <p className="mt-2">
                       <i className="fa-regular fa-edit i"></i>

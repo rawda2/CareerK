@@ -35,18 +35,18 @@
     color: var(--grayColor);
   }
   .Btn{
-    color: #fff;
-    background-color: var(--primaryColor);
-    border: 0;
+    color: #fff !important;
+    background-color: var(--primaryColor) !important;
+    border: 0 !important;
     padding: 10px 20px;
     border-radius: 5px;
 
   }
 
    .btnn{
-    color: var(--primaryColor);
-    background-color: transparent;
-     border: 1px solid var(--primaryColor);
+    color: var(--primaryColor) !important;
+    background-color: transparent !important;
+     border: 1px solid var(--primaryColor) !important;
      border-radius: 5px;
     padding: 10px 20px;
 
@@ -58,6 +58,10 @@
   }
   .w-90{
     width: 90%;
+
+  }
+   .w-95{
+    width: 95%;
 
   }
   .w-80{
